@@ -1,2 +1,2 @@
-# BioSCape-box-priorities
-Repo for box prioritization code for flights
+# BioSCape-flight-planning
+Repo for flight planning, including box prioritization script, etc
