@@ -165,6 +165,7 @@ box_priority_area_cloud %>% arrange(desc(area_based_box_priority)) %>%
   st_set_geometry(NULL) %>%
   mutate(across(area_based_box_priority, function(x){round(as.numeric(x/max(area_based_box_priority)*100))})) %>%
  # mutate(across(area_based_box_priority, as.numeric)) %>%
+  mutate(across(cloudmean, round)) %>%
   mutate(across(priority_area_cloud, function(x){round(as.numeric(x/max(priority_area_cloud)*100))})) %>%
  # mutate(across(priority_area_cloud, as.numeric)) %>%
   write_sheet(ss = "https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHVOu9U8ajDIY8/edit#gid=0",
