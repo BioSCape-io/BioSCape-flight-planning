@@ -80,6 +80,8 @@ st_write(boxes,dsn = outboxfile,append=F)
 
 boxes <- st_read("data/20230919_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg")
 rois <- st_read("data/20230907_Team ROIs.gpkg")
+outroifile= "data/20230907_Team_ROIs_addedPIs.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE BOXES
+
 
 ## Fix missing PI's issues
 rois$team_PI <- str_replace(rois$team_PI, "Slingsby", "Townsend")
@@ -94,6 +96,9 @@ rois <- rbind(rois, hmm)
 ## fix and clean up geometries
 boxes <- st_make_valid(boxes)
 rois <- st_make_valid(rois)
+
+## export rois with added PIs
+st_write(rois,dsn = outroifile,append=F) 
 
 ## sum up area each PI requested (total)
 roi_areas <- rois %>% 
@@ -158,7 +163,9 @@ box_priority_area_cloud <- box_priority_area %>%
 ## Sort and export
 box_priority_area_cloud %>% arrange(desc(area_based_box_priority)) %>%
   st_set_geometry(NULL) %>%
-  mutate(across(area_based_box_priority, as.numeric)) %>%
-  mutate(across(priority_area_cloud, as.numeric)) %>%
+  mutate(across(area_based_box_priority, function(x){round(as.numeric(x/max(area_based_box_priority)*100))})) %>%
+ # mutate(across(area_based_box_priority, as.numeric)) %>%
+  mutate(across(priority_area_cloud, function(x){round(as.numeric(x/max(priority_area_cloud)*100))})) %>%
+ # mutate(across(priority_area_cloud, as.numeric)) %>%
   write_sheet(ss = "https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHVOu9U8ajDIY8/edit#gid=0",
               sheet = as.character(Sys.Date()))
