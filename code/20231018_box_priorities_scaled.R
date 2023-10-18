@@ -16,63 +16,7 @@ if (Sys.getenv("USER") == "adamw") {gmail = "adamw@buffalo.edu"}
 drive_auth(email = gmail)
 gs4_auth(token = drive_token())
 
-
-#### PART 1: Pulling out elevation and cloud values for the flight boxes ####
-# note: we are still missing wind...
-
-## download cloud and elevation data
-# this is slow so I've commented it out, you only need to run it once! 
-
-options(timeout=1000)
-
-if (!file.exists("data/webdata_downloads/cloud_10.tif")) {
-  download.file("http://data.earthenv.org/cloud/MODCF_monthlymean_10.tif",
-  destfile="data/webdata_downloads/cloud_10.tif")} #october 
-if (!file.exists("data/webdata_downloads/cloud_11.tif")) {
-  download.file("http://data.earthenv.org/cloud/MODCF_monthlymean_11.tif",
-  destfile="data/webdata_downloads/cloud_11.tif")} #november 
-if (!file.exists("data/webdata_downloads/earthenv_maxelev_1km.tif")) {
-  download.file("https://data.earthenv.org/topography/elevation_1KMma_SRTM.tif",
-  destfile="data/webdata_downloads/earthenv_maxelev_1km.tif")} #1km elevation from SRTM
-                
-
-# download.file("http://data.earthenv.org/cloud/MODCF_monthlymean_11.tif",
-#            destfile="data/webdata_downloads/cloud_11.tif") #november
-# download.file("https://data.earthenv.org/topography/elevation_1KMma_SRTM.tif",
-#             destfile="data/webdata_downloads/earthenv_maxelev_1km.tif") #1km elevation from SRTM
-
-cloud10=rast("data/webdata_downloads/cloud_10.tif")
-cloud11=rast("data/webdata_downloads/cloud_11.tif")
-elev=rast("data/webdata_downloads/earthenv_maxelev_1km.tif")
-
-## read in gpkg of flight boxes 
-boxfile= "data/20230919_G3_AVIRIS_PRISM_boxes.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE BOXES
-outboxfile= "data/20230919_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE BOXES
-
-## reproject flight boxes into crs of cloud layers
-boxes1= st_read(boxfile) %>% #st_read(file.path(dir,boxfile)) %>% 
-  st_transform(st_crs(cloud10))
-
-## extract cloud and elevation stats
-boxes1$cloud10=terra::extract(cloud10,boxes1,fun=mean)[,2]/100
-boxes1$cloud11=terra::extract(cloud11,boxes1,fun=mean)[,2]/100
-boxes1$maxmaxelev=terra::extract(elev,boxes1,fun=max)[,2]
-boxes1$meanmaxelev=terra::extract(elev,boxes1,fun=mean)[,2]
-
-## pull out mean cloud values for each box 
-# this is average cloud in october and november for each box
-# high average cloud means high risk for that box (less likely to be clear on any given day)
-boxes <- 
-  boxes1%>%
-  mutate(cloudmean=(cloud10+cloud11)/2)%>% #mean oct/nov cloud
-  st_transform(9221) #transform back to original CRS (epsg9221)
-
-## export boxes with added cloud info 
-st_write(boxes,dsn = outboxfile,append=F) 
-
-
-#### PART 2: Working out how to prioritise boxes ####
-
+#### PART 2: Box Prioritization ####
 
 ## read in flight boxes and team region of interest (ROI) polygons 
 #boxes_dir= "data/20230919_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE ROIS
@@ -102,9 +46,16 @@ st_write(rois,dsn = outroifile,append=F)
 
 ## sum up area each PI requested (total)
 roi_areas <- rois %>% 
-  mutate(area = st_area(.)) %>% 
+  mutate(area = st_area(.),
+         prioritynum = case_when(
+           priority=='high'~ 2,
+           priority=='medium' ~ 1,
+           priority=='low' ~ 0.5
+         ),
+         scaled_area=area*prioritynum) %>% 
   group_by(team_PI) %>% 
-  summarize(pi_total_area = sum(area) )
+  summarize(pi_total_area = sum(area),
+            pi_totalscaled_area=sum(scaled_area))
 
 ## add column for area already acquired (in m^2)
 ### NEED TO READ IN OR CALCULATE pi_area_acquired below "###" - currently hard-wired to "0"
@@ -147,10 +98,18 @@ areas_pi_flightbox <-
 
 ## calculate area-based priority index by box ### ADD PRIORITY HERE?
 box_priority_area <- areas_pi_flightbox %>% 
-  mutate(pi_area_in_box = polygon_area/pi_total_area) %>% # View()
-  mutate(pi_area_priority = pi_area_in_box * area_remaining)  %>% #View() #you are penalised if you already have an acquisition
+  mutate(pi_area_in_box = polygon_area/pi_total_area,
+         prioritynum = case_when(
+           priority=='high'~ 2,
+           priority=='medium' ~ 1,
+           priority=='low' ~ 0.5
+         ),
+         pi_scaledarea_in_box=(polygon_area*prioritynum)/pi_totalscaled_area) %>% 
+  mutate(pi_area_priority = pi_scaledarea_in_box * area_remaining,
+         pi_scaledarea_priority=pi_area_in_box * area_remaining)  %>% #View() #you are penalised if you already have an acquisition
   group_by(box_nr) %>% 
-  summarize(area_based_box_priority = sum(pi_area_priority) ) 
+  summarize(area_based_box_priority = sum(pi_area_priority),
+            area_based_box_scaled_priority = sum(pi_scaledarea_priority)) 
   
 ## pull in a cloud risk value for each box 
 box_priority_cloud <- st_set_geometry(boxes,NULL) #remove geometry from boxes, coerce to dataframe
