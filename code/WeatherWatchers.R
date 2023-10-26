@@ -28,3 +28,4 @@ boxes <- boxes %>% st_transform(st_crs(folks))
 # Map
 folks %>% select(Name, Number) %>% mapview(label = "Number", color = "magenta", col.regions = "white") +
   mapview(boxes, label = "box_nr")
+
