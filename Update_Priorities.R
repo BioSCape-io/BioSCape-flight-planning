@@ -105,23 +105,23 @@ boxes=bind_rows(
     st_transform(st_crs(rois)) 
   
 # QA link
-message(print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
-message(paste(list.files("data/"),collapse="\n"))
+  message(print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
+  message(paste(list.files("data/"),collapse="\n"))
 
-#QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
-  QA_lines_G3 = read_xlsx(qurl, sheet = "G3") %>% 
+  QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
+  #QA_lines_G3 = read_xlsx(qurl, sheet = "G3") %>% 
   left_join(g3_lines,by=c("Line"="Name")) %>% 
   mutate(aircraft="G3") %>% 
   select(box=Box,aircraft,target=Target, line=Line,prism=Status_PRISM,
          avirisng=Status_ANG,date=Date_Flown,geometry) %>% 
   pivot_longer(c(prism,avirisng),names_to="instrument",values_to="status")
 
-QA_lines_G5 = read_xlsx("data/QA_Lines.xlsx", sheet = "G5") %>% 
-  mutate(aircraft="G5") %>% 
-  left_join(g5_lines,by=c("Line"="Name")) %>% 
-  select(box=Box_Number,aircraft,target=Target, line=Line,hytes=Status_HyTES,
-         lvis=Status_LVIS,date=Date_Flown,geometry) %>% 
-  pivot_longer(c(hytes,lvis),names_to="instrument",values_to="status")
+  QA_lines_G5 = read_xlsx("data/QA_Lines.xlsx", sheet = "G5") %>% 
+    mutate(aircraft="G5") %>% 
+    left_join(g5_lines,by=c("Line"="Name")) %>% 
+    select(box=Box_Number,aircraft,target=Target, line=Line,hytes=Status_HyTES,
+           lvis=Status_LVIS,date=Date_Flown,geometry) %>% 
+    pivot_longer(c(hytes,lvis),names_to="instrument",values_to="status")
 
 lines=bind_rows(QA_lines_G3,QA_lines_G5) %>% 
   filter(is.na(status)|status!=-1) %>%  # drop morning/afternoon if the other is flown
