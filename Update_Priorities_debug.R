@@ -82,5 +82,20 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
   rois <- st_read("data/20231026_Team_ROIs_addedPIs.gpkg") %>% 
     left_join(select(instruments,team_PI=PI,target))
   
-
+# download lines from Visions
+  g5lines="data/g5lines.json"
+  download.file(paste0(vurl,"flightplans/Bioscape_101023_GV_lines.json"),destfile=g5lines)
+  g3lines="data/g3lines.json"
+  download.file(paste0(vurl,"flightplans/G3_plans_20231024_am.json"),destfile=g3lines)
+  
+  g5_lines =  st_read(g5lines) %>% 
+    st_transform(9221) %>% 
+    mutate(box=substr(Name,1,3))
+  
+  g3_lines = st_read(g3lines) %>% 
+    st_transform(9221) %>% 
+    st_transform(st_crs(rois)) 
+  
+# QA link
+  
 
