@@ -9,7 +9,7 @@ library(sf)
 # Run workflow
 source("workflow/Update_Priorities.R")
 
-load("data/report_data.Rdata")
+#load("data/report_data.Rdata")
 
 ```
 

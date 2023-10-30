@@ -55,3 +55,5 @@ data/*
 *_files
 *_cache
 .DS_Store
+
+/.quarto/
