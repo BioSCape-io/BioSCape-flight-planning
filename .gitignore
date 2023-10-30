@@ -50,7 +50,8 @@ rsconnect/
 
 # Big files
 data/webdata_downloads/
-data*
+data/*
+!data/20231026_Team_ROIs_addedPIs.gpkg
 *_files
 *_cache
 .DS_Store
