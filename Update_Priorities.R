@@ -32,7 +32,7 @@ tag=paste0("v",format(lubridate::today(),"%Y%m%d"))
 #drive_download(qurl,path="data/QA_lines.xlsx",overwrite=T)
 qurl="https://drive.google.com/uc?export=download&id=1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e"
 
-tryCatch(download.file(qurl,destfile="data/QA_lines.xlsx"),
+tryCatch(download.file(qurl,destfile="data/QA_Lines.xlsx"),
          error = function(e){e},
          warning = function(w){w})
 

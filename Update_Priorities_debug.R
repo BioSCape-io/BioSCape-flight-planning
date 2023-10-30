@@ -119,4 +119,23 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
     st_as_sf() 
   
   
-
+# box level summaries
+  
+  box_summary <- lines %>% 
+    st_set_geometry(NULL) %>% 
+    group_by(aircraft,box,instrument) %>% 
+    summarize(lines=n(),
+              lines_flown=sum(!is.na(status),na.rm=T),
+              lines_complete=sum(status>0.5,na.rm=T),
+              lines_summary=paste0(lines_complete,"/",lines)) 
+  
+  
+  
+  ## sum up area each PI requested (total)
+  pi_roi_areas <- rois %>% 
+    mutate(area = st_area(.)) %>% 
+    group_by(team_PI, target) %>% 
+    summarize(pi_total_area = sum(area)) %>% 
+    mutate(pi_total_area=set_units(pi_total_area,"km^2"))
+  
+  
