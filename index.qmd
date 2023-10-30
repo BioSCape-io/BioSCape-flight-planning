@@ -54,7 +54,7 @@ system("ls")
 
 if(file.exists("data/QA_Lines.xlsx")){system("echo data/QS_lines.xlsx exists")}
 
-read_xlsx("BioSCape-flight-planning/data/QA_lines.xlsx")
+read_xlsx("data/QA_lines.xlsx")
 
 
 
