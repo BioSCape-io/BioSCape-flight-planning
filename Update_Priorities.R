@@ -260,30 +260,40 @@ box_summary <- lines %>%
 
 ## Write the geojson and push to release
 
-linefile=file.path("data",paste0("bioscape_line_summary_",tag,".geojson"))
-boxfile=file.path("data",paste0("bioscape_box_summary_",tag,".geojson"))
+  linefile=file.path("data",paste0("bioscape_line_summary_",tag,".geojson"))
 
+  boxfile=file.path("data",paste0("bioscape_box_summary_",tag,".geojson"))
 
+  if(file.exists(linefile)){ file.remove(linefile)}
 
-if(file.exists(linefile)) file.remove(linefile)
-swath_summary  %>% 
-#  geojson_style(var="priority_updated",
-#                fill = 
-#                  colorQuantile(domain = swath_summary$priority_updated,
-#                palette=viridis::viridis_pal(direction = -1))) %>% 
-  st_write(linefile,append=F)
+  swath_summary  %>% 
+  #  geojson_style(var="priority_updated",
+  #                fill = 
+  #                  colorQuantile(domain = swath_summary$priority_updated,
+  #                palette=viridis::viridis_pal(direction = -1))) %>% 
+    st_write(linefile,append=F)
 
-if(file.exists(boxfile)) file.remove(boxfile)
-box_summary %>% 
-  st_write(boxfile, overwrite=T)
+  if(file.exists(boxfile)){ file.remove(boxfile)}
+
+  box_summary %>% 
+    st_write(boxfile, overwrite=T)
 
 
 # if release doesn't exist for this tag - create it
-if(!any(tag%in%pb_releases(repo)$tag_name))  pb_new_release(repo = repo,tag=tag)
+  if(!any(tag%in%pb_releases(repo)$tag_name)){pb_new_release(repo = repo,tag=tag)} 
 
-pb_upload(file = linefile,repo=repo,tag=tag)
-pb_upload(file = boxfile,repo=repo,tag=tag)
+  pb_upload(file = linefile,repo=repo,tag=tag)
 
+  pb_upload(file = boxfile,repo=repo,tag=tag)
+
+#Save objects
+  print("Saving Objects")
+
+  save(boxes, lines, rois, swaths, 
+       swath_summary, line_summary, box_summary,
+       file = "data/report_data.Rdata")
+
+print("Workflow Complete!")
 
 
 # Upload to google drive
@@ -291,21 +301,14 @@ today=lubridate::today() #set sheet name
 psheet="https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHVOu9U8ajDIY8/edit#gid=0" #separate sheet
 
 
-box_summary %>% 
-  group_by(aircraft) %>% 
-  mutate(priority_updated=rank(desc(priority_updated)),
-         priority_original=rank(desc(priority_original))) %>% 
-  select(aircraft, box, target, priority_updated, priority_original) %>% 
-  arrange(aircraft, priority_updated) %>% 
-  write_sheet(ss = psheet,
-              sheet = as.character(today))
+#Commented this out temporarily
 
-print("Saving Objects")
-
-save(boxes, lines, rois, swaths, 
-     swath_summary, line_summary, box_summary,
-     file = "data/report_data.Rdata")
-
-print("Workflow Complete!")
-
+  # box_summary %>% 
+  #   group_by(aircraft) %>% 
+  #   mutate(priority_updated=rank(desc(priority_updated)),
+  #          priority_original=rank(desc(priority_original))) %>% 
+  #   select(aircraft, box, target, priority_updated, priority_original) %>% 
+  #   arrange(aircraft, priority_updated) %>% 
+  #   write_sheet(ss = psheet,
+  #               sheet = as.character(today))
 
