@@ -53,7 +53,9 @@ tryCatch(download.file(qurl,destfile="BioSCape-flight-planning/data/QA_lines.xls
 message(print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
 message(print(paste("BioSCape-flight-planning/data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
 
-ls()
+read_xlsx("BioSCape-flight-planning/data/QA_lines.xlsx")
+
+system("ls")
 
 ```
 
