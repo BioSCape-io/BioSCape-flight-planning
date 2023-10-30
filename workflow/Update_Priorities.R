@@ -31,13 +31,13 @@ tag=paste0("v",format(lubridate::today(),"%Y%m%d"))
 #qurl="https://docs.google.com/spreadsheets/d/1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
 #drive_download(qurl,path="data/QA_lines.xlsx",overwrite=T)
 qurl="https://drive.google.com/uc?export=download&id=1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e"
-download.file(qurl,destfile="data/QA_lines.xlsx")
+download.file(qurl,destfile="../data/QA_lines.xlsx")
 
 # PI requests
 #purl="https://docs.google.com/spreadsheets/d/1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
 #drive_download(purl,path="data/TeamRequirements.xlsx",overwrite=T)
 purl="https://drive.google.com/uc?export=download&id=1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu"
-download.file(purl,destfile="data/TeamRequirements.xlsx")
+download.file(purl,destfile="../data/TeamRequirements.xlsx")
 
 #boxes <- st_read("data/20231026_combinedboxes.gpkg") 
 
