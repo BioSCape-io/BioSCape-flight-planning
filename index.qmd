@@ -7,7 +7,7 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-#source("workflow/Update_Priorities.R")
+source("workflow/Update_Priorities.R")
 
 load("data/report_data.Rdata")
 
