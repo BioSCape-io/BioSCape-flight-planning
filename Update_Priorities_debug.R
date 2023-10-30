@@ -32,7 +32,7 @@ tag=paste0("v",format(lubridate::today(),"%Y%m%d"))
 #drive_download(qurl,path="data/QA_lines.xlsx",overwrite=T)
 qurl="https://drive.google.com/uc?export=download&id=1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e"
 
-tryCatch(download.file(qurl,destfile="data/QA_lines.xlsx"),
+tryCatch(download.file(qurl,destfile="data/QA_Lines.xlsx"),
          error = function(e){e},
          warning = function(w){w})
 
@@ -97,11 +97,8 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
     st_transform(st_crs(rois)) 
   
 # QA link
-  message(print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
-  message(paste(list.files("data/"),collapse="\n"))
   system("ls data/")
-  system("ls BioSCape-flight-planning/data/")
-  
+
   QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
     #QA_lines_G3 = read_xlsx(qurl, sheet = "G3") %>% 
     left_join(g3_lines,by=c("Line"="Name")) %>% 
