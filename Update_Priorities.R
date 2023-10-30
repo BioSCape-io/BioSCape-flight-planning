@@ -91,7 +91,8 @@ g3_lines = st_read(g3lines) %>%
 message(print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx"))))
 message(paste(list.files("data/"),collapse="\n"))
 
-QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
+#QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
+  QA_lines_G3 = read_xlsx(qurl, sheet = "G3") %>% 
   left_join(g3_lines,by=c("Line"="Name")) %>% 
   mutate(aircraft="G3") %>% 
   select(box=Box,aircraft,target=Target, line=Line,prism=Status_PRISM,
