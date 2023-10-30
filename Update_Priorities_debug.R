@@ -49,25 +49,38 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
 #boxes <- st_read("data/20231026_combinedboxes.gpkg") 
 
 # visions url
-vurl="https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/"
+  vurl="https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/"
 
 # get boxes
-box_g5= st_read(paste0(vurl,"flightboxes/20231018_G5_LVIS_boxes_metadata.json")) %>% 
-  mutate(aircraft="G5",
-         box_nr=paste0("G5_",box_nr)) # add the G5 prefix
-
-box_g3 = st_read(paste0(vurl,"flightboxes/20231024_G3_AVNG_PRISM_boxes_am.geojson")) %>% 
-  filter(box_nr!="G3_25_EW") %>% 
-    mutate(aircraft="G3",
-         box_nr=gsub("_AM","",box_nr), # drop the AM tags
-         box_nr=gsub("_NS","",box_nr)) # drop the NS tags
+  box_g5= st_read(paste0(vurl,"flightboxes/20231018_G5_LVIS_boxes_metadata.json")) %>% 
+    mutate(aircraft="G5",
+           box_nr=paste0("G5_",box_nr)) # add the G5 prefix
   
-boxes=bind_rows(
-  mutate(box_g5,aircraft,box_nr=as.character(box_nr),instrument,target,geometry),
-  select(box_g3,aircraft,box_nr,instrument,target,geometry))%>%
-  st_make_valid() %>%
-  st_transform(9221)  
+  box_g3 = st_read(paste0(vurl,"flightboxes/20231024_G3_AVNG_PRISM_boxes_am.geojson")) %>% 
+    filter(box_nr!="G3_25_EW") %>% 
+      mutate(aircraft="G3",
+           box_nr=gsub("_AM","",box_nr), # drop the AM tags
+           box_nr=gsub("_NS","",box_nr)) # drop the NS tags
+  
+  boxes=bind_rows(
+    mutate(box_g5,aircraft,box_nr=as.character(box_nr),instrument,target,geometry),
+    select(box_g3,aircraft,box_nr,instrument,target,geometry))%>%
+    st_make_valid() %>%
+    st_transform(9221)  
 
 
 
 ## clip ROIs to flight boxes, dissolve, and calculate areas (in m^2)
+  
+  instruments=tryCatch(readxl::read_xlsx("data/TeamRequirements.xlsx"),
+                       error = function(e){e},
+                       warning = function(w){w})
+  
+  
+  #rois <- st_read(paste0(vurl,"flightboxes/20230907_Team_ROIs.json")) %>% st_transform(9221)
+  
+  rois <- st_read("data/20231026_Team_ROIs_addedPIs.gpkg") %>% 
+    left_join(select(instruments,team_PI=PI,target))
+  
+
+

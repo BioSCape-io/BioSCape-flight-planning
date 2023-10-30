@@ -31,13 +31,26 @@ tag=paste0("v",format(lubridate::today(),"%Y%m%d"))
 #qurl="https://docs.google.com/spreadsheets/d/1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
 #drive_download(qurl,path="data/QA_lines.xlsx",overwrite=T)
 qurl="https://drive.google.com/uc?export=download&id=1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e"
-download.file(qurl,destfile="data/QA_lines.xlsx")
+
+tryCatch(download.file(qurl,destfile="data/QA_lines.xlsx"),
+         error = function(e){e},
+         warning = function(w){w})
+
 
 # PI requests
 #purl="https://docs.google.com/spreadsheets/d/1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
 #drive_download(purl,path="data/TeamRequirements.xlsx",overwrite=T)
 purl="https://drive.google.com/uc?export=download&id=1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu"
-download.file(purl,destfile="data/TeamRequirements.xlsx")
+
+tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
+         error = function(e){e},
+         warning = function(w){w})
+
+
+tryCatch(download.file(purl,destfile="BioSCape-flight-planning/data/TeamRequirements.xlsx"),
+         error = function(e){e},
+         warning = function(w){w})
+
 
 #boxes <- st_read("data/20231026_combinedboxes.gpkg") 
 
@@ -64,14 +77,18 @@ boxes=bind_rows(
 
 
 ## clip ROIs to flight boxes, dissolve, and calculate areas (in m^2)
-instruments=readxl::read_xlsx("data/TeamRequirements.xlsx")
 
-#rois <- st_read(paste0(vurl,"flightboxes/20230907_Team_ROIs.json")) %>% st_transform(9221)
-
-rois <- st_read("data/20231026_Team_ROIs_addedPIs.gpkg") %>% 
-  left_join(select(instruments,team_PI=PI,target))
-
-
+  instruments=tryCatch(readxl::read_xlsx("data/TeamRequirements.xlsx"),
+           error = function(e){e},
+           warning = function(w){w})
+  
+  
+  #rois <- st_read(paste0(vurl,"flightboxes/20230907_Team_ROIs.json")) %>% st_transform(9221)
+  
+  rois <- st_read("data/20231026_Team_ROIs_addedPIs.gpkg") %>% 
+    left_join(select(instruments,team_PI=PI,target))
+  
+  
 
 # download lines from Visions
 g5lines="data/g5lines.json"
