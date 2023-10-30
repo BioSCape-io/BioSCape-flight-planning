@@ -1,0 +1,73 @@
+## packages 
+library(quarto)
+library(knitr)
+library(sf)
+library(tidyverse)
+library(rgeos)
+library(dplyr)
+library(units)
+library(lubridate)
+library(leaflet)
+library(piggyback)
+library( geojsonio)
+library(readxl)
+library(googlesheets4)
+
+# push to release
+repo="BioSCape-io/BioSCape-flight-planning"
+tag=paste0("v",format(lubridate::today(),"%Y%m%d"))
+
+
+#if (Sys.getenv("USER") == "jasper") {gmail = "jasper.slingsby@uct.ac.za"}
+#if (Sys.getenv("USER") == "adamw") {gmail = "adamw@buffalo.edu"}
+
+# Authenticate and access the Google Sheet
+#drive_auth(email = gmail)
+#gs4_auth(token = drive_token())
+
+## Download files
+
+# QA spreadsheet
+#qurl="https://docs.google.com/spreadsheets/d/1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
+#drive_download(qurl,path="data/QA_lines.xlsx",overwrite=T)
+qurl="https://drive.google.com/uc?export=download&id=1mKEFMiQ_J0mK3mOpt_t74PyFWwpga42e"
+
+tryCatch(download.file(qurl,destfile="data/QA_lines.xlsx"),
+         error = function(e){e},
+         warning = function(w){w})
+
+
+# PI requests
+#purl="https://docs.google.com/spreadsheets/d/1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu/edit?usp=sharing&ouid=100268570982256677112&rtpof=true&sd=true"
+#drive_download(purl,path="data/TeamRequirements.xlsx",overwrite=T)
+purl="https://drive.google.com/uc?export=download&id=1BnejyLTEeGbFO3TmF3nmddxclUnJiLBu"
+
+tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
+         error = function(e){e},
+         warning = function(w){w})
+
+#boxes <- st_read("data/20231026_combinedboxes.gpkg") 
+
+# visions url
+vurl="https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/"
+
+# get boxes
+box_g5= st_read(paste0(vurl,"flightboxes/20231018_G5_LVIS_boxes_metadata.json")) %>% 
+  mutate(aircraft="G5",
+         box_nr=paste0("G5_",box_nr)) # add the G5 prefix
+
+box_g3 = st_read(paste0(vurl,"flightboxes/20231024_G3_AVNG_PRISM_boxes_am.geojson")) %>% 
+  filter(box_nr!="G3_25_EW") %>% 
+    mutate(aircraft="G3",
+         box_nr=gsub("_AM","",box_nr), # drop the AM tags
+         box_nr=gsub("_NS","",box_nr)) # drop the NS tags
+  
+boxes=bind_rows(
+  mutate(box_g5,aircraft,box_nr=as.character(box_nr),instrument,target,geometry),
+  select(box_g3,aircraft,box_nr,instrument,target,geometry))%>%
+  st_make_valid() %>%
+  st_transform(9221)  
+
+
+
+## clip ROIs to flight boxes, dissolve, and calculate areas (in m^2)
