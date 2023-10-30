@@ -7,21 +7,14 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-#source("Update_Priorities.R") #commented out for debugging
-
-source("Update_Priorities_debug.R") #commented out for debugging
-
-#load("data/report_data.Rdata")
-```
-
-
-
-```{r temp}
 
 source("Update_Priorities.R")
 
-```
+warning("Commented out the google sheets bits of Update_Priorities.R for now")
+message("Commented out the google sheets bits of Update_Priorities.R for now")
 
+#load("data/report_data.Rdata")
+```
 
 # BioSCape Project Overview
 
@@ -69,11 +62,11 @@ box_summary %>%
 
 ```{r line_summary, warning=F, echo=F}
 
-line_summary %>% 
+line_summary %>% ungroup()%>%
   mutate(summary=paste0(nlines_acquired,"/",
                         nlines_total, " (",line_proportion,"%)")) %>% 
-  pivot_wider(id_cols=c(box, target),
-              names_from = aircraft, values_from = summary) %>% 
+  pivot_wider(id_cols=c('box', 'target'),
+              names_from = 'aircraft', values_from = 'summary') %>% 
   kable()
 
 
