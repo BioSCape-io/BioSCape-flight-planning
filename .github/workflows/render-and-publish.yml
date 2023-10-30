@@ -7,6 +7,10 @@ on:
 jobs:
   quarto-render-and-deploy:
     runs-on: ubuntu-latest
+    container: adamwilsonlab/emma:latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      RENV_PATHS_ROOT: ~/.local/share/renv
     steps:
     - uses: actions/checkout@v2
     - name: Install R Package Dependencies
