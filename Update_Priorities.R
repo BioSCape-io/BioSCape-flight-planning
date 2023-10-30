@@ -174,23 +174,22 @@ box_summary <- lines %>%
 
 
 # Get total area requested by each PI
-pi_total_area<-swath_rois %>% 
-  group_by(team_PI) %>% 
-  summarize(pi_total_area=sum(pi_area))
-
+  pi_total_area<-swath_rois %>% 
+    group_by(team_PI) %>% 
+    summarize(pi_total_area=sum(pi_area))
 
 # Intersect swaths and ROIs
-pi_swaths <- swath_rois %>% 
-  mutate(status=ifelse(is.na(status),0,status), # separate out if it's good
-         pi_area_acquired=ifelse(status>0,pi_area,0)) %>%  # area of flown lines
-  group_by(box, team_PI,target,instrument) %>% 
-  left_join(st_set_geometry(pi_total_area,NULL)) %>% 
-  mutate(
-    pi_proportion_totalarea_in_swath = 100 * pi_area/pi_total_area,
-    pi_proportion_totalarea_in_swath_acquired = 100 * pi_area_acquired/pi_total_area,
-    pi_area_remaining = pi_area-pi_area_acquired,
-    pi_proportion_area_remaining=100*pi_area_remaining/pi_total_area
-  )
+  pi_swaths <- swath_rois %>% 
+    mutate(status=ifelse(is.na(status),0,status), # separate out if it's good
+           pi_area_acquired=ifelse(status>0,pi_area,0)) %>%  # area of flown lines
+    group_by(box, team_PI,target,instrument) %>% 
+    left_join(st_set_geometry(pi_total_area,NULL)) %>% 
+    mutate(
+      pi_proportion_totalarea_in_swath = 100 * pi_area/pi_total_area,
+      pi_proportion_totalarea_in_swath_acquired = 100 * pi_area_acquired/pi_total_area,
+      pi_area_remaining = pi_area-pi_area_acquired,
+      pi_proportion_area_remaining=100*pi_area_remaining/pi_total_area
+    )
 
 # summary of lines flown and acquired
 line_summary <-
