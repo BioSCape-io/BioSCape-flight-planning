@@ -246,5 +246,33 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
     group_by(aircraft) %>% 
     mutate(priority_updated_rank=rank(desc(priority_updated)),
            priority_original_rank=rank(desc(priority_original)))
+
+ ## Write the geojson and push to release
+  
+  linefile=file.path("data",paste0("bioscape_line_summary_",tag,".geojson"))
+  boxfile=file.path("data",paste0("bioscape_box_summary_",tag,".geojson"))
+  
+  if(file.exists(linefile)){ file.remove(linefile)}
+  
+  swath_summary  %>% 
+    #  geojson_style(var="priority_updated",
+    #                fill = 
+    #                  colorQuantile(domain = swath_summary$priority_updated,
+    #                palette=viridis::viridis_pal(direction = -1))) %>% 
+    st_write(linefile,append=F)
+  
+  if(file.exists(boxfile)){ file.remove(boxfile)}
+  
+  box_summary %>% 
+    st_write(boxfile, overwrite=T)
+  
+  
+  # if release doesn't exist for this tag - create it
+  if(!any(tag%in%pb_releases(repo)$tag_name)){pb_new_release(repo = repo,tag=tag)}
+  
+  pb_upload(file = linefile,repo=repo,tag=tag)
+  pb_upload(file = boxfile,repo=repo,tag=tag)
+  
+  
   
   
