@@ -50,3 +50,7 @@ rsconnect/
 
 # Big files
 data/webdata_downloads/
+data*
+*_files
+*_cache
+.DS_Store
