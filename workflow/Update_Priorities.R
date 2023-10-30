@@ -88,6 +88,10 @@ g3_lines = st_read(g3lines) %>%
   st_transform(st_crs(rois)) 
 
 # QA link
+print(paste("data/QA_Lines.xlsx:", file.exists ("data/QA_Lines.xlsx")))
+
+paste(list.files("data/"))
+
 
 QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
   left_join(g3_lines,by=c("Line"="Name")) %>% 
