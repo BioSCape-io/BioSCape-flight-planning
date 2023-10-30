@@ -192,71 +192,70 @@ box_summary <- lines %>%
     )
 
 # summary of lines flown and acquired
-line_summary <-
-  lines %>% 
-  group_by(aircraft,box,target,instrument) %>% 
-  summarize(
-    nlines_total=n(),
-    nlines_flown = sum(status>=0,na.rm=T),
-    nlines_acquired = sum(status>0.5,na.rm=T),
-    line_proportion = ifelse(nlines_acquired==0,0,100*nlines_acquired/nlines_flown)
-  ) %>% 
-      filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-         aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-         aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-         aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-           )
-
-
-swath_summary <-
-  pi_swaths %>% 
-  group_by(aircraft, box, target, line, instrument) %>% 
-  summarize(
-    nPI=length(unique(team_PI)),
-    PIs=paste(unique(team_PI),collapse=","),
-    roi_total_area=sum(pi_area,na.rm=T),
-    status=sum(status>0.5,na.rm=T),
-    priority_updated = 
-      sum(pi_proportion_totalarea_in_swath * pi_proportion_area_remaining,na.rm=T),
-    priority_original = 
-      sum(pi_proportion_totalarea_in_swath * pi_proportion_totalarea_in_swath,na.rm=T)) %>% 
-    st_set_geometry(NULL) %>% 
-    filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-         aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-         aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-         aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-           ) %>% 
-  left_join(select(lines,line,geometry),by="line")
-
-
-
-
-box_summary <- 
-  swath_summary %>% 
-   group_by(aircraft, box, target, instrument) %>% 
+  
+  line_summary <-
+    lines %>% 
+    group_by(aircraft,box,target,instrument) %>% 
     summarize(
-              #pi_area_total = sum(pi_total_area,na.rm=T),
-              # pi_area_acquired = sum(pi_area_acquired,na.rm=T),
-              # pi_proportion_totalarea_in_swath = sum(pi_proportion_totalarea_in_swath,na.rm=T),
-              # pi_proportion_totalarea_in_swath_acquired = 
-              #   sum(pi_proportion_totalarea_in_swath_acquired,na.rm=T),
-      priority_updated = mean(priority_updated,na.rm=T),
-              priority_original = mean(priority_original,na.rm=T),
-      nPIs=length(unique(unlist(strsplit(PIs,",")))),
-      PIs=paste(unique(unlist(strsplit(PIs,","))),collapse=",")
-              ) %>% 
-  mutate(box_nr=paste0(aircraft,"_",box)) %>% 
-  left_join(st_set_geometry(line_summary, NULL),
-            by=c("aircraft","box","target","instrument")) %>% 
-  filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-         aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-         aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-         aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-           ) %>% 
-  left_join(select(boxes,box_nr,geometry),by="box_nr") %>% 
-  group_by(aircraft) %>% 
-  mutate(priority_updated_rank=rank(desc(priority_updated)),
-         priority_original_rank=rank(desc(priority_original)))
+      nlines_total=n(),
+      nlines_flown = sum(status>=0,na.rm=T),
+      nlines_acquired = sum(status>0.5,na.rm=T),
+      line_proportion = ifelse(nlines_acquired==0,0,100*nlines_acquired/nlines_flown)
+    ) %>% 
+        filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
+           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+             )
+
+
+  swath_summary <-
+    pi_swaths %>% 
+    group_by(aircraft, box, target, line, instrument) %>% 
+    summarize(
+      nPI=length(unique(team_PI)),
+      PIs=paste(unique(team_PI),collapse=","),
+      roi_total_area=sum(pi_area,na.rm=T),
+      status=sum(status>0.5,na.rm=T),
+      priority_updated = 
+        sum(pi_proportion_totalarea_in_swath * pi_proportion_area_remaining,na.rm=T),
+      priority_original = 
+        sum(pi_proportion_totalarea_in_swath * pi_proportion_totalarea_in_swath,na.rm=T)) %>% 
+      st_set_geometry(NULL) %>% 
+      filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
+           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+             ) %>% 
+    left_join(select(lines,line,geometry),by="line")
+
+
+  box_summary <- 
+    swath_summary %>% 
+     group_by(aircraft, box, target, instrument) %>% 
+      summarize(
+                #pi_area_total = sum(pi_total_area,na.rm=T),
+                # pi_area_acquired = sum(pi_area_acquired,na.rm=T),
+                # pi_proportion_totalarea_in_swath = sum(pi_proportion_totalarea_in_swath,na.rm=T),
+                # pi_proportion_totalarea_in_swath_acquired = 
+                #   sum(pi_proportion_totalarea_in_swath_acquired,na.rm=T),
+        priority_updated = mean(priority_updated,na.rm=T),
+                priority_original = mean(priority_original,na.rm=T),
+        nPIs=length(unique(unlist(strsplit(PIs,",")))),
+        PIs=paste(unique(unlist(strsplit(PIs,","))),collapse=",")
+                ) %>% 
+    mutate(box_nr=paste0(aircraft,"_",box)) %>% 
+    left_join(st_set_geometry(line_summary, NULL),
+              by=c("aircraft","box","target","instrument")) %>% 
+    filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
+           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+             ) %>% 
+    left_join(select(boxes,box_nr,geometry),by="box_nr") %>% 
+    group_by(aircraft) %>% 
+    mutate(priority_updated_rank=rank(desc(priority_updated)),
+           priority_original_rank=rank(desc(priority_original)))
 
 
 ## Write the geojson and push to release
