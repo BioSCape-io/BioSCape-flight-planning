@@ -7,9 +7,9 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-source("Update_Priorities.R")
+#source("Update_Priorities.R")
 
-#load("data/report_data.Rdata")
+load("data/report_data.Rdata")
 
 ```
 
@@ -53,6 +53,26 @@ box_summary %>%
     spread(instrument,proportion) %>% 
     kable()
 ```
+
+# Box Priorities
+
+```{r echo=F}
+partial_lines <-
+  lines %>% 
+  group_by(aircraft,box) %>% 
+  summarize(any=any(!is.na(status)),
+            none=!any(!is.na(status))) %>% 
+  st_set_geometry(NULL)         
+
+box_summary %>% 
+  select(box, aircraft, rank = priority_updated_rank, line_proportion) %>%
+#  left_join(partial_lines)
+  pivot_wider(id_cols=box,names_from = aircraft,values_from = rank) %>% 
+  arrange(G5) %>% 
+  kable()
+
+```
+
 
 
 # Line completion summary
