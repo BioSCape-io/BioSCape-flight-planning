@@ -1,4 +1,4 @@
-```{r, message=F, echo=F, warning=F, output=F,cache=F}
+```{r setup, message=F, echo=F, warning=F, output=F,cache=F}
 ## packages 
 library(quarto)
 library(knitr)
@@ -11,6 +11,10 @@ library(sf)
 
 load("data/report_data.Rdata")
 
+#source("Update_Priorities.R")
+
+
+#load("data/report_data.Rdata")
 ```
 
 # BioSCape Project Overview
@@ -18,10 +22,10 @@ load("data/report_data.Rdata")
 ## Schedule
 
 
-```{r, echo=F}
+```{r linedates, echo=F}
 
 linedates <- lines %>% 
-  filter(!is.na(date)) %>% 
+  dplyr::filter(!is.na(date)) %>% 
   group_by(aircraft) %>% 
   st_set_geometry(NULL) %>% 
   mutate(date=as_date(as.character(date),format="%Y%m%d")) %>% 
@@ -44,7 +48,7 @@ dtime %>% t() %>% kable()
 
 # Project Level Completion
 
-```{r, echo=F, warning=F, message=F}
+```{r box_summary, echo=F, warning=F, message=F}
 box_summary %>% 
   # st_set_geometry(NULL) %>% 
    group_by(instrument) %>% 
@@ -77,13 +81,13 @@ box_summary %>%
 
 # Line completion summary
 
-```{r, warning=F, echo=F}
+```{r line_summary, warning=F, echo=F}
 
-line_summary %>% 
+line_summary %>% ungroup()%>%
   mutate(summary=paste0(nlines_acquired,"/",
                         nlines_total, " (",line_proportion,"%)")) %>% 
-  pivot_wider(id_cols=c(box, target),
-              names_from = aircraft, values_from = summary) %>% 
+  pivot_wider(id_cols=c('box', 'target'),
+              names_from = 'aircraft', values_from = 'summary') %>% 
   kable()
 
 

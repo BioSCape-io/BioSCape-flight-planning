@@ -46,41 +46,35 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
          error = function(e){e},
          warning = function(w){w})
 
-
-tryCatch(download.file(purl,destfile="BioSCape-flight-planning/data/TeamRequirements.xlsx"),
-         error = function(e){e},
-         warning = function(w){w})
-
-
 #boxes <- st_read("data/20231026_combinedboxes.gpkg") 
 
 # visions url
-vurl="https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/"
+  vurl="https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/"
 
 # get boxes
-box_g5= st_read(paste0(vurl,"flightboxes/20231018_G5_LVIS_boxes_metadata.json")) %>% 
-  mutate(aircraft="G5",
-         box_nr=paste0("G5_",box_nr)) # add the G5 prefix
-
-box_g3 = st_read(paste0(vurl,"flightboxes/20231024_G3_AVNG_PRISM_boxes_am.geojson")) %>% 
-  filter(box_nr!="G3_25_EW") %>% 
-    mutate(aircraft="G3",
-         box_nr=gsub("_AM","",box_nr), # drop the AM tags
-         box_nr=gsub("_NS","",box_nr)) # drop the NS tags
+  box_g5= st_read(paste0(vurl,"flightboxes/20231018_G5_LVIS_boxes_metadata.json")) %>% 
+    mutate(aircraft="G5",
+           box_nr=paste0("G5_",box_nr)) # add the G5 prefix
   
-boxes=bind_rows(
-  mutate(box_g5,aircraft,box_nr=as.character(box_nr),instrument,target,geometry),
-  select(box_g3,aircraft,box_nr,instrument,target,geometry))%>%
-  st_make_valid() %>%
-  st_transform(9221)  
+  box_g3 = st_read(paste0(vurl,"flightboxes/20231024_G3_AVNG_PRISM_boxes_am.geojson")) %>% 
+    filter(box_nr!="G3_25_EW") %>% 
+      mutate(aircraft="G3",
+           box_nr=gsub("_AM","",box_nr), # drop the AM tags
+           box_nr=gsub("_NS","",box_nr)) # drop the NS tags
+  
+  boxes=bind_rows(
+    mutate(box_g5,aircraft,box_nr=as.character(box_nr),instrument,target,geometry),
+    select(box_g3,aircraft,box_nr,instrument,target,geometry))%>%
+    st_make_valid() %>%
+    st_transform(9221)  
 
 
 
 ## clip ROIs to flight boxes, dissolve, and calculate areas (in m^2)
-
+  
   instruments=tryCatch(readxl::read_xlsx("data/TeamRequirements.xlsx"),
-           error = function(e){e},
-           warning = function(w){w})
+                       error = function(e){e},
+                       warning = function(w){w})
   
   
   #rois <- st_read(paste0(vurl,"flightboxes/20230907_Team_ROIs.json")) %>% st_transform(9221)
@@ -88,8 +82,6 @@ boxes=bind_rows(
   rois <- st_read("data/20231026_Team_ROIs_addedPIs.gpkg") %>% 
     left_join(select(instruments,team_PI=PI,target))
   
-  
-
 # download lines from Visions
   g5lines="data/g5lines.json"
   download.file(paste0(vurl,"flightplans/Bioscape_101023_GV_lines.json"),destfile=g5lines)
@@ -105,45 +97,47 @@ boxes=bind_rows(
     st_transform(st_crs(rois)) 
   
 # QA link
+  system("ls data/")
 
-QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
-  left_join(g3_lines,by=c("Line"="Name")) %>% 
-  mutate(aircraft="G3") %>% 
-  select(box=Box,aircraft,target=Target, line=Line,prism=Status_PRISM,
-         avirisng=Status_ANG,date=Date_Flown,geometry) %>% 
-  pivot_longer(c(prism,avirisng),names_to="instrument",values_to="status")
-
+  QA_lines_G3 = read_xlsx("data/QA_Lines.xlsx", sheet = "G3") %>% 
+    #QA_lines_G3 = read_xlsx(qurl, sheet = "G3") %>% 
+    left_join(g3_lines,by=c("Line"="Name")) %>% 
+    mutate(aircraft="G3") %>% 
+    select(box=Box,aircraft,target=Target, line=Line,prism=Status_PRISM,
+           avirisng=Status_ANG,date=Date_Flown,geometry) %>% 
+    pivot_longer(c(prism,avirisng),names_to="instrument",values_to="status")
+  
   QA_lines_G5 = read_xlsx("data/QA_Lines.xlsx", sheet = "G5") %>% 
     mutate(aircraft="G5") %>% 
     left_join(g5_lines,by=c("Line"="Name")) %>% 
     select(box=Box_Number,aircraft,target=Target, line=Line,hytes=Status_HyTES,
            lvis=Status_LVIS,date=Date_Flown,geometry) %>% 
     pivot_longer(c(hytes,lvis),names_to="instrument",values_to="status")
-
-lines=bind_rows(QA_lines_G3,QA_lines_G5) %>% 
-  filter(is.na(status)|status!=-1) %>%  # drop morning/afternoon if the other is flown
-  st_as_sf() 
-
+  
+  lines=bind_rows(QA_lines_G3,QA_lines_G5) %>% 
+    filter(is.na(status)|status!=-1) %>%  # drop morning/afternoon if the other is flown
+    st_as_sf() 
+  
+  
 # box level summaries
-
-box_summary <- lines %>% 
-  st_set_geometry(NULL) %>% 
-  group_by(aircraft,box,instrument) %>% 
-  summarize(lines=n(),
-            lines_flown=sum(!is.na(status),na.rm=T),
-            lines_complete=sum(status>0.5,na.rm=T),
-            lines_summary=paste0(lines_complete,"/",lines)) 
-
-
-
-## sum up area each PI requested (total)
+  
+  box_summary <- lines %>% 
+    st_set_geometry(NULL) %>% 
+    group_by(aircraft,box,instrument) %>% 
+    summarize(lines=n(),
+              lines_flown=sum(!is.na(status),na.rm=T),
+              lines_complete=sum(status>0.5,na.rm=T),
+              lines_summary=paste0(lines_complete,"/",lines)) 
+  
+  
+  
+  ## sum up area each PI requested (total)
   pi_roi_areas <- rois %>% 
     mutate(area = st_area(.)) %>% 
     group_by(team_PI, target) %>% 
     summarize(pi_total_area = sum(area)) %>% 
     mutate(pi_total_area=set_units(pi_total_area,"km^2"))
-
-
+  
 ## Get swath-level PI information
   swaths <- lines %>% 
     mutate(
@@ -153,12 +147,12 @@ box_summary <- lines %>%
         instrument == "prism" ~ st_buffer(., dist=1000)$geometry,
         instrument == "avirisng" ~ st_buffer(., dist=1000)$geometry,
         TRUE ~ NA
-        )
+      )
     ) #%>% 
   #  separate(line,c("aircraft","box","line","fl"),sep="_",extra="drop",remove = F) #%>% 
   #  select(-Orientation,-lat1,-lon1,lat2,-lon2,-az12, -az21,-'Flight _ltitude_(ASL)')
-
-
+  
+  
   st_agr(swaths) = "constant"
   st_agr(rois) = "constant"
   st_agr(boxes) = "constant"
@@ -168,13 +162,13 @@ box_summary <- lines %>%
     st_intersection(st_transform(rois,st_crs(swaths))) %>% 
     filter(tolower(target)==tolower(target.1)) %>%  #drop mismatched terrestrial and aquatic
     mutate(pi_area = set_units(set_units(st_area(.),"km^2"),NULL)) # area of each swath per pi
-
-
+  
 # Get total area requested by each PI
   pi_total_area<-swath_rois %>% 
     group_by(team_PI) %>% 
     summarize(pi_total_area=sum(pi_area))
-
+  
+  
 # Intersect swaths and ROIs
   pi_swaths <- swath_rois %>% 
     mutate(status=ifelse(is.na(status),0,status), # separate out if it's good
@@ -187,9 +181,9 @@ box_summary <- lines %>%
       pi_area_remaining = pi_area-pi_area_acquired,
       pi_proportion_area_remaining=100*pi_area_remaining/pi_total_area
     )
-
-# summary of lines flown and acquired
   
+# summary of lines flown and acquired
+
   line_summary <-
     lines %>% 
     group_by(aircraft,box,target,instrument) %>% 
@@ -199,13 +193,13 @@ box_summary <- lines %>%
       nlines_acquired = sum(status>0.5,na.rm=T),
       line_proportion = ifelse(nlines_acquired==0,0,100*nlines_acquired/nlines_flown)
     ) %>% 
-        filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-             )
-
-
+    filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
+             aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+             aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+             aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+    )
+  
+  
   swath_summary <-
     pi_swaths %>% 
     group_by(aircraft, box, target, line, instrument) %>% 
@@ -218,94 +212,67 @@ box_summary <- lines %>%
         sum(pi_proportion_totalarea_in_swath * pi_proportion_area_remaining,na.rm=T),
       priority_original = 
         sum(pi_proportion_totalarea_in_swath * pi_proportion_totalarea_in_swath,na.rm=T)) %>% 
-      st_set_geometry(NULL) %>% 
-      filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-             ) %>% 
+    st_set_geometry(NULL) %>% 
+    filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
+             aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+             aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+             aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+    ) %>% 
     left_join(select(lines,line,geometry),by="line")
-
-
+  
   box_summary <- 
     swath_summary %>% 
-     group_by(aircraft, box, target, instrument) %>% 
-      summarize(
-                #pi_area_total = sum(pi_total_area,na.rm=T),
-                # pi_area_acquired = sum(pi_area_acquired,na.rm=T),
-                # pi_proportion_totalarea_in_swath = sum(pi_proportion_totalarea_in_swath,na.rm=T),
-                # pi_proportion_totalarea_in_swath_acquired = 
-                #   sum(pi_proportion_totalarea_in_swath_acquired,na.rm=T),
-        priority_updated = mean(priority_updated,na.rm=T),
-                priority_original = mean(priority_original,na.rm=T),
-        nPIs=length(unique(unlist(strsplit(PIs,",")))),
-        PIs=paste(unique(unlist(strsplit(PIs,","))),collapse=",")
-                ) %>% 
+    group_by(aircraft, box, target, instrument) %>% 
+    summarize(
+      #pi_area_total = sum(pi_total_area,na.rm=T),
+      # pi_area_acquired = sum(pi_area_acquired,na.rm=T),
+      # pi_proportion_totalarea_in_swath = sum(pi_proportion_totalarea_in_swath,na.rm=T),
+      # pi_proportion_totalarea_in_swath_acquired = 
+      #   sum(pi_proportion_totalarea_in_swath_acquired,na.rm=T),
+      priority_updated = mean(priority_updated,na.rm=T),
+      priority_original = mean(priority_original,na.rm=T),
+      nPIs=length(unique(unlist(strsplit(PIs,",")))),
+      PIs=paste(unique(unlist(strsplit(PIs,","))),collapse=",")
+    ) %>% 
     mutate(box_nr=paste0(aircraft,"_",box)) %>% 
     left_join(st_set_geometry(line_summary, NULL),
               by=c("aircraft","box","target","instrument")) %>% 
     filter(aircraft=="G3"&target=="Terrestrial"&instrument=="avirisng"| #filter priorities
-           aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
-           aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
-           aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
-             ) %>% 
+             aircraft=="G3"&target=="Aquatic"&instrument=="prism"|
+             aircraft=="G5"&target=="Terrestrial"&instrument=="lvis"|
+             aircraft=="G5"&target=="Aquatic"&instrument=="hytes"  
+    ) %>% 
     left_join(select(boxes,box_nr,geometry),by="box_nr") %>% 
     group_by(aircraft) %>% 
     mutate(priority_updated_rank=rank(desc(priority_updated)),
            priority_original_rank=rank(desc(priority_original)))
 
-
-## Write the geojson and push to release
-
+ ## Write the geojson and push to release
+  
   linefile=file.path("data",paste0("bioscape_line_summary_",tag,".geojson"))
-
   boxfile=file.path("data",paste0("bioscape_box_summary_",tag,".geojson"))
-
+  
   if(file.exists(linefile)){ file.remove(linefile)}
-
+  
   swath_summary  %>% 
-  #  geojson_style(var="priority_updated",
-  #                fill = 
-  #                  colorQuantile(domain = swath_summary$priority_updated,
-  #                palette=viridis::viridis_pal(direction = -1))) %>% 
+    #  geojson_style(var="priority_updated",
+    #                fill = 
+    #                  colorQuantile(domain = swath_summary$priority_updated,
+    #                palette=viridis::viridis_pal(direction = -1))) %>% 
     st_write(linefile,append=F)
-
+  
   if(file.exists(boxfile)){ file.remove(boxfile)}
-
+  
   box_summary %>% 
     st_write(boxfile, overwrite=T)
-
-
-# if release doesn't exist for this tag - create it
-  if(!any(tag%in%pb_releases(repo)$tag_name)){pb_new_release(repo = repo,tag=tag)} 
-
+  
+  
+  # if release doesn't exist for this tag - create it
+  if(!any(tag%in%pb_releases(repo)$tag_name)){pb_new_release(repo = repo,tag=tag)}
+  
   pb_upload(file = linefile,repo=repo,tag=tag)
-
   pb_upload(file = boxfile,repo=repo,tag=tag)
-
-#Save objects
-  print("Saving Objects")
-
-  save(boxes, lines, rois, swaths, 
-       swath_summary, line_summary, box_summary,
-       file = "data/report_data.Rdata")
-
-print("Workflow Complete!")
-
-
-# Upload to google drive
-today=lubridate::today() #set sheet name
-psheet="https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHVOu9U8ajDIY8/edit#gid=0" #separate sheet
-
-
-#Commented this out temporarily
-
-  # box_summary %>% 
-  #   group_by(aircraft) %>% 
-  #   mutate(priority_updated=rank(desc(priority_updated)),
-  #          priority_original=rank(desc(priority_original))) %>% 
-  #   select(aircraft, box, target, priority_updated, priority_original) %>% 
-  #   arrange(aircraft, priority_updated) %>% 
-  #   write_sheet(ss = psheet,
-  #               sheet = as.character(today))
-
+  
+  
+  
+  
