@@ -138,4 +138,29 @@ tryCatch(download.file(purl,destfile="data/TeamRequirements.xlsx"),
     summarize(pi_total_area = sum(area)) %>% 
     mutate(pi_total_area=set_units(pi_total_area,"km^2"))
   
+## Get swath-level PI information
+  swaths <- lines %>% 
+    mutate(
+      geometry=case_when(
+        instrument == "lvis" ~ st_buffer(lines, dist=1000)$geometry,
+        instrument == "hytes" ~ st_buffer(., dist=6000)$geometry,
+        instrument == "prism" ~ st_buffer(., dist=1000)$geometry,
+        instrument == "avirisng" ~ st_buffer(., dist=1000)$geometry,
+        TRUE ~ NA
+      )
+    ) #%>% 
+  #  separate(line,c("aircraft","box","line","fl"),sep="_",extra="drop",remove = F) #%>% 
+  #  select(-Orientation,-lat1,-lon1,lat2,-lon2,-az12, -az21,-'Flight _ltitude_(ASL)')
+  
+  
+  st_agr(swaths) = "constant"
+  st_agr(rois) = "constant"
+  st_agr(boxes) = "constant"
+  options(warn=0)
+  
+  swath_rois <- swaths %>% 
+    st_intersection(st_transform(rois,st_crs(swaths))) %>% 
+    filter(tolower(target)==tolower(target.1)) %>%  #drop mismatched terrestrial and aquatic
+    mutate(pi_area = set_units(set_units(st_area(.),"km^2"),NULL)) # area of each swath per pi
+  
   
