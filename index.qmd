@@ -7,14 +7,10 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-#source("Update_Priorities.R")
-
-load("data/report_data.Rdata")
-
-#source("Update_Priorities.R")
-
+source("Update_Priorities.R")
 
 #load("data/report_data.Rdata")
+
 ```
 
 # BioSCape Project Overview
