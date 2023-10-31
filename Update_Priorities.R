@@ -277,7 +277,8 @@ box_summary <- lines %>%
 
 
 # if release doesn't exist for this tag - create it
-  if(!any(tag%in%pb_releases(repo)$tag_name)){pb_new_release(repo = repo,tag=tag)} 
+  if(!any(tag%in%pb_releases(repo)$tag_name))
+      pb_new_release(repo = repo,tag=tag) 
 
   pb_upload(file = linefile,repo=repo,tag=tag)
 
