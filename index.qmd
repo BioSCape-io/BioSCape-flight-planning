@@ -13,10 +13,12 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-#source("Update_Priorities.R")
+if (Sys.getenv("USER") != "adamw") {
+  source("Update_Priorities.R")}
 
-load("data/report_data.Rdata")
-
+if (Sys.getenv("USER") == "adamw") {
+  load("data/report_data.Rdata")
+}
 ```
 
 
