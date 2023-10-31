@@ -1,3 +1,9 @@
+---
+title: "BioSCape Project Overview"
+format: html
+editor: source
+---
+
 ```{r setup, message=F, echo=F, warning=F, output=F,cache=F}
 ## packages 
 library(quarto)
@@ -7,13 +13,12 @@ library(lubridate)
 library(sf)
 
 # Run workflow
-source("Update_Priorities.R")
+#source("Update_Priorities.R")
 
-#load("data/report_data.Rdata")
+load("data/report_data.Rdata")
 
 ```
 
-# BioSCape Project Overview
 
 ## Schedule
 
@@ -36,7 +41,7 @@ dtime=data.frame(
   mutate(science_days_total = stop_date - start_date ,
            science_days_used=today()-start_date+1,
          total_days_remaining=stop_date-today(),
-         science_days_remaining=floor(total_days_remaining-(total_days_remaining/8)))
+         approx_science_days_remaining=floor(total_days_remaining-(total_days_remaining/8)))
 
 dtime %>% t() %>% kable()
 
