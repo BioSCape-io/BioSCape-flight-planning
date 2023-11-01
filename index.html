@@ -98,9 +98,9 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
-<col style="width: 38%">
-<col style="width: 16%">
-<col style="width: 44%">
+<col style="width: 25%">
+<col style="width: 40%">
+<col style="width: 34%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -120,13 +120,13 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: left;">flight_dates</td>
-<td style="text-align: left;">Oct20, Oct22</td>
-<td style="text-align: left;">Oct22, Oct25, Oct26, Oct28, Oct30</td>
+<td style="text-align: left;">Oct20, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30</td>
+<td style="text-align: left;">Oct22, Oct25, Oct26, Oct28, Oct30, Oct31</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">flight_days</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">5</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">6</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">science_days_total</td>
@@ -135,18 +135,18 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td style="text-align: left;">science_days_used</td>
-<td style="text-align: left;">12 days</td>
-<td style="text-align: left;">10 days</td>
+<td style="text-align: left;">13 days</td>
+<td style="text-align: left;">11 days</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">total_days_remaining</td>
-<td style="text-align: left;">15 days</td>
-<td style="text-align: left;">26 days</td>
+<td style="text-align: left;">14 days</td>
+<td style="text-align: left;">25 days</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">approx_science_days_remaining</td>
-<td style="text-align: left;">13 days</td>
-<td style="text-align: left;">22 days</td>
+<td style="text-align: left;">12 days</td>
+<td style="text-align: left;">21 days</td>
 </tr>
 </tbody>
 </table>
@@ -168,10 +168,10 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: right;">53.3</td>
+<td style="text-align: right;">37.5</td>
+<td style="text-align: right;">81.8</td>
 <td style="text-align: right;">40</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">23.1</td>
-<td style="text-align: right;">15</td>
 </tr>
 </tbody>
 </table>
@@ -185,130 +185,125 @@ ul.task-list li input[type="checkbox"] {
 <pre><code>`summarise()` has grouped output by 'aircraft'. You can override using the
 `.groups` argument.</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Values from `rank` are not uniquely identified; output will contain list-cols.
+• Use `values_fn = list` to suppress this warning.
+• Use `values_fn = {summary_fun}` to summarise duplicates.
+• Use the following dplyr code to identify duplicates.
+  {data} %&gt;%
+  dplyr::group_by(box, aircraft) %&gt;%
+  dplyr::summarise(n = dplyr::n(), .groups = "drop") %&gt;%
+  dplyr::filter(n &gt; 1L)</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <thead>
 <tr class="header">
 <th style="text-align: right;">box</th>
-<th style="text-align: right;">G3</th>
-<th style="text-align: right;">G5</th>
+<th style="text-align: left;">G3</th>
+<th style="text-align: left;">G5</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: right;">NA</td>
 <td style="text-align: right;">1</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">11.5</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">16</td>
 <td style="text-align: right;">2</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">11.5</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">11.5</td>
+</tr>
+<tr class="even">
 <td style="text-align: right;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">7</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">19</td>
-<td style="text-align: right;">NA</td>
 <td style="text-align: right;">5</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">1.0, 11.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">NULL</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">NULL</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">NULL</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">NULL</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">NULL</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">18</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">NULL</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">22</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">7</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">NULL</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">NA</td>
-<td style="text-align: right;">8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">9</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">11</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">13</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">21</td>
-<td style="text-align: right;">NA</td>
-<td style="text-align: right;">14</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">15</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">16</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">17</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">18</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">NA</td>
-</tr>
-<tr class="odd">
 <td style="text-align: right;">25</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">NA</td>
+<td style="text-align: left;">14.5</td>
+<td style="text-align: left;">NULL</td>
 </tr>
 </tbody>
 </table>
@@ -333,7 +328,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">1</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">0/11 (0%)</td>
-<td style="text-align: left;">0/33 (0%)</td>
+<td style="text-align: left;">33/33 (100%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
@@ -345,7 +340,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">3</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">8/8 (100%)</td>
-<td style="text-align: left;">58/58 (100%)</td>
+<td style="text-align: left;">56/58 (100%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
@@ -356,14 +351,14 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">0/8 (0%)</td>
+<td style="text-align: left;">8/8 (100%)</td>
 <td style="text-align: left;">0/34 (0%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">6</td>
 <td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">0/6 (0%)</td>
-<td style="text-align: left;">0/33 (0%)</td>
+<td style="text-align: left;">6/6 (100%)</td>
+<td style="text-align: left;">32/33 (100%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">7</td>
@@ -381,19 +376,19 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">9</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">4/4 (100%)</td>
-<td style="text-align: left;">0/37 (0%)</td>
+<td style="text-align: left;">36/37 (100%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">0/11 (0%)</td>
-<td style="text-align: left;">0/23 (0%)</td>
+<td style="text-align: left;">15/23 (100%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">11</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">0/6 (0%)</td>
-<td style="text-align: left;">0/30 (0%)</td>
+<td style="text-align: left;">4/30 (100%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">12</td>
@@ -411,7 +406,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">14</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">0/9 (0%)</td>
-<td style="text-align: left;">0/25 (0%)</td>
+<td style="text-align: left;">8/25 (100%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">15</td>
@@ -435,25 +430,25 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">18</td>
 <td style="text-align: left;">Aquatic</td>
 <td style="text-align: left;">0/8 (0%)</td>
-<td style="text-align: left;">0/13 (0%)</td>
+<td style="text-align: left;">4/13 (66.6666666666667%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">19</td>
 <td style="text-align: left;">Aquatic</td>
 <td style="text-align: left;">1/1 (100%)</td>
-<td style="text-align: left;">0/16 (0%)</td>
+<td style="text-align: left;">12/16 (75%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">20</td>
 <td style="text-align: left;">Aquatic</td>
 <td style="text-align: left;">1/1 (100%)</td>
-<td style="text-align: left;">0/4 (0%)</td>
+<td style="text-align: left;">2/4 (50%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">21</td>
 <td style="text-align: left;">Aquatic</td>
 <td style="text-align: left;">1/1 (100%)</td>
-<td style="text-align: left;">0/4 (0%)</td>
+<td style="text-align: left;">1/4 (100%)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">22</td>
@@ -470,14 +465,26 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td style="text-align: right;">24</td>
 <td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">0/10 (0%)</td>
-<td style="text-align: left;">0/11 (0%)</td>
+<td style="text-align: left;">5/5 (100%)</td>
+<td style="text-align: left;">0/14 (0%)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">25</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">1/1 (100%)</td>
 <td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">6/29 (75%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">30/30 (100%)</td>
 </tr>
 </tbody>
 </table>
@@ -501,123 +508,123 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L01_FL205</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">24</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_24_AM_L04_FL370</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">24</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_24_AM_L03_FL370</td>
-<td style="text-align: right;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">24</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_24_AM_L05_FL370</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L03_FL205</td>
-<td style="text-align: right;">5</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L04_FL205</td>
-<td style="text-align: right;">6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">24</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_24_AM_L02_FL370</td>
-<td style="text-align: right;">7</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L02_FL205</td>
-<td style="text-align: right;">8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">24</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_24_AM_L01_FL370</td>
-<td style="text-align: right;">9</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L05_FL205</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L06_FL205</td>
-<td style="text-align: right;">11</td>
-</tr>
-<tr class="even">
 <td style="text-align: right;">18</td>
 <td style="text-align: left;">Aquatic</td>
 <td style="text-align: left;">G3_18_AM_L01_FL185</td>
-<td style="text-align: right;">12</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">G3_18_AM_L02_FL185</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">18</td>
 <td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_18_AM_L02_FL185</td>
-<td style="text-align: right;">13</td>
+<td style="text-align: left;">G3_18_AM_L03_FL185</td>
+<td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_5_L07_FL205</td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">G3_18_AM_L04_FL185</td>
+<td style="text-align: right;">4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">13</td>
-<td style="text-align: left;">Terrestrial</td>
-<td style="text-align: left;">G3_13_L03_FL166</td>
-<td style="text-align: right;">15</td>
-</tr>
-<tr class="even">
 <td style="text-align: right;">10</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">G3_10_L07_FL165</td>
-<td style="text-align: right;">16</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">G3_22_AM_L01_FL185</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_10_L09_FL165</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_13_L03_FL166</td>
+<td style="text-align: right;">8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">13</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">G3_13_L04_FL166</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">9</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_18_AM_L03_FL185</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_10_L08_FL165</td>
+<td style="text-align: right;">10</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">22</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">G3_22_AM_L01_FL185</td>
-<td style="text-align: right;">19</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_10_L06_FL165</td>
+<td style="text-align: right;">11</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">13</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">G3_13_L02_FL166</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_13_L05_FL166</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_1_L08_FL165</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_1_L09_FL165</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_13_L01_FL166</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_1_L07_FL165</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_13_L06_FL166</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_1_L05_FL165</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">G3_7_L06_FL175</td>
 <td style="text-align: right;">20</td>
 </tr>
 </tbody>
@@ -640,124 +647,124 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">Q305M-Q305Z</td>
+<td style="text-align: right;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">Q303M-Q303Z</td>
+<td style="text-align: right;">2.0</td>
+</tr>
+<tr class="odd">
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">B502A-B502M</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.0</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">B501A-B501M</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">NA</td>
 <td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C705A-C705M</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: left;">Q303A-Q303M</td>
+<td style="text-align: right;">5.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">NA</td>
 <td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C704A-C704M</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q305M-Q305Z</td>
-<td style="text-align: right;">5</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q304M-Q304Z</td>
-<td style="text-align: right;">6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C703A-C703M</td>
-<td style="text-align: right;">7</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q303M-Q303Z</td>
-<td style="text-align: right;">8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q302M-Q302Z</td>
-<td style="text-align: right;">9</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">17</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C702A-C702M</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q301M-Q301Z</td>
-<td style="text-align: right;">11</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">17</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C706A-C706Z</td>
-<td style="text-align: right;">12</td>
+<td style="text-align: left;">Q305A-Q305M</td>
+<td style="text-align: right;">6.0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">Terrestrial</td>
 <td style="text-align: left;">B503A-B503M</td>
-<td style="text-align: right;">13</td>
+<td style="text-align: right;">7.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q300M-Q300Z</td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B500A-B500M</td>
+<td style="text-align: right;">8.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C701A-C701M</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B504A-B504M</td>
+<td style="text-align: right;">9.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">17</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">C700A-C700M</td>
-<td style="text-align: right;">16</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B511A-B511M</td>
+<td style="text-align: right;">10.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q304A-Q304M</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B510A-B510M</td>
+<td style="text-align: right;">11.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q303A-Q303M</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B509A-B509M</td>
+<td style="text-align: right;">12.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">23</td>
-<td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q305A-Q305M</td>
-<td style="text-align: right;">19</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B508A-B508M</td>
+<td style="text-align: right;">13.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">23</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B512A-B512M</td>
+<td style="text-align: right;">14.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B507A-B507M</td>
+<td style="text-align: right;">15.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B506A-B506M</td>
+<td style="text-align: right;">16.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B505A-B505M</td>
+<td style="text-align: right;">17.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Terrestrial</td>
+<td style="text-align: left;">B516A-B516Z</td>
+<td style="text-align: right;">18.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">NA</td>
 <td style="text-align: left;">Aquatic</td>
-<td style="text-align: left;">Q302A-Q302M</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: left;">Q200M-Q200Z</td>
+<td style="text-align: right;">20.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Aquatic</td>
+<td style="text-align: left;">Q201M-Q201Z</td>
+<td style="text-align: right;">20.5</td>
 </tr>
 </tbody>
 </table>
