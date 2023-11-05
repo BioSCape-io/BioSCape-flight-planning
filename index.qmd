@@ -11,7 +11,7 @@ library(knitr)
 library(tidyverse)
 library(lubridate)
 library(sf)
-library(reactable)
+library(DT)
 
 
 # Run workflow
@@ -97,7 +97,7 @@ box_summary %>%
               names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
   left_join(box_line_summary,by="box") %>%
   arrange(updated_rank_avirisng) %>%
-  kable()
+  datatable()
 
   # reactable(defaultPageSize=24,
   #           columns = 
@@ -132,13 +132,14 @@ box_summary %>%
               names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
   left_join(box_line_summary,by="box") %>%
   arrange(updated_rank_lvis) %>%
-  reactable(defaultPageSize=24,
-            columns = 
-              list(
-  "% avirisng" = colDef(format = colFormat(digits=0)),
-    "% prism" = colDef(format = colFormat(digits=0)),
-    "% hytes" = colDef(format = colFormat(digits=0)),
-    "% lvis" = colDef(format = colFormat(digits=0))))
+  datatable()
+  # reactable(defaultPageSize=24,
+  #           columns = 
+  #             list(
+  # "% avirisng" = colDef(format = colFormat(digits=0)),
+  #   "% prism" = colDef(format = colFormat(digits=0)),
+  #   "% hytes" = colDef(format = colFormat(digits=0)),
+  #   "% lvis" = colDef(format = colFormat(digits=0))))
 
 ```
 
@@ -185,7 +186,8 @@ swath_summary %>%
   pivot_wider(id_cols=c(box,line,target),
               names_from = instrument,values_from = c(priority_rank)) %>% 
   arrange(avirisng) %>% 
-  reactable(defaultPageSize=10, filterable = TRUE)
+  datatable()
+#  reactable(defaultPageSize=10, filterable = TRUE)
 ```
 
 ## GV
@@ -201,7 +203,8 @@ swath_summary %>%
     pivot_wider(id_cols=c(box,line,target),
               names_from = "instrument",values_from = c(priority_rank)) %>% 
   arrange(lvis) %>% 
-  reactable(defaultPageSize=10, filterable = TRUE)
+  datatable()
+#  reactable(defaultPageSize=10, filterable = TRUE)
 ```
 
 
