@@ -27,7 +27,7 @@ jobs:
         Rscript -e "install.packages('reactable')"
     - name: "Install Quarto and render"
       uses: quarto-dev/quarto-actions/setup@v2
-    - name: Render Quarto Project
+    - name: "Quarto Render"
       uses: quarto-dev/quarto-actions/render@v2
       with:
         to: html # If set, it will be equivalent to `quarto render --to html`
