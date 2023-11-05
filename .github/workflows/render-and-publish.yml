@@ -26,8 +26,11 @@ jobs:
         Rscript -e "questionr::qscan(list.files(pattern='*.qmd',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
         Rscript -e "install.packages('reactable')"
     - name: "Install Quarto and render"
-      uses: pommevilla/quarto-render@main
-    - name: "Deploy to gh-pages"
+      uses: quarto-dev/quarto-actions/setup@v2
+    - name: Render Quarto Project
+      uses: quarto-dev/quarto-actions/render@v2
+      with:
+        to: html # If set, it will be equivalent to `quarto render --to html`
       uses: peaceiris/actions-gh-pages@v3
       if: github.ref == 'refs/heads/main'
       with:
