@@ -6,6 +6,7 @@ editor: source
 
 ```{r setup, message=F, echo=F, warning=F, output=F,cache=F, include=F}
 install.packages("quarto")
+install.packages("reactable")
 
 ## packages 
 library(quarto)
