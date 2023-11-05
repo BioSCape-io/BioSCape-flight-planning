@@ -1,7 +1,8 @@
 # https://github.com/pommevilla/friendly-dollop/blob/master/.github/workflows/quarto-render.yml
 name: Render and deploy Quarto files
 on: 
-  push: main
+  push:
+  pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
