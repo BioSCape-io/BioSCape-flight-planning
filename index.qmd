@@ -196,7 +196,7 @@ swath_summary %>%
   mutate(priority_rank=rank(desc(priority_updated))) %>% 
   select(box, target, instrument, line, priority_rank) %>% 
     pivot_wider(id_cols=c(box,line,target),
-              names_from = instrument,values_from = c(priority_rank)) %>% 
+              names_from = "instrument",values_from = c(priority_rank)) %>% 
   arrange(lvis) %>% 
   reactable(defaultPageSize=10, filterable = TRUE)
 ```
