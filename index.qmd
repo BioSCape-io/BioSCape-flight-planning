@@ -4,7 +4,7 @@ format: html
 editor: source
 ---
 
-```{r setup, message=F, echo=F, warning=F, output=F,cache=F, include=F}
+```{r setup, message=F, echo=F, warning=F, output=F,cache=F}
 
 ## packages 
 library(quarto)
