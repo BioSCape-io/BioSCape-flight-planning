@@ -25,8 +25,6 @@ jobs:
         Rscript -e "questionr::qscan(list.files(pattern='*.R',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
         Rscript -e "questionr::qscan(list.files(pattern='*.qmd',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
         Rscript -e "install.packages('reactable')"
-    - name: "Install Quarto and render"
-      uses: quarto-dev/quarto-actions/setup@v2
     - name: Publish to GitHub Pages (and render) 
       uses: quarto-dev/quarto-actions/publish@v2
       with:
