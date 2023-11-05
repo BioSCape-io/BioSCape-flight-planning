@@ -27,6 +27,8 @@ jobs:
         Rscript -e "install.packages('questionr')"
         Rscript -e "questionr::qscan(list.files(pattern='*.R',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
         Rscript -e "questionr::qscan(list.files(pattern='*.qmd',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
+        Rscript -e "install.packages('quarto')"
+        Rscript -e "install.packages('reactable')"
 
     - name: "Deploy to gh-pages"
       uses: peaceiris/actions-gh-pages@v3
