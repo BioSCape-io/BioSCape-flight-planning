@@ -11,10 +11,13 @@ library(knitr)
 library(tidyverse)
 library(lubridate)
 library(sf)
+library(reactable)
+
 
 # Run workflow
 if (Sys.getenv("USER") != "adamw") {
-  source("Update_Priorities.R")}
+  source("Update_Priorities.R")
+  }
 
 if (Sys.getenv("USER") == "adamw") {
   load("data/report_data.Rdata")
@@ -51,6 +54,12 @@ dtime %>% t() %>% kable()
 
 # Project Level Completion
 
+The following summaries have a few caveats:
+
+* Priorities constructed by intersecting _approximate_ swath widths with PI ROIs
+
+
+
 ```{r box_summary, echo=F, warning=F, message=F}
 box_summary %>% 
   # st_set_geometry(NULL) %>% 
@@ -63,35 +72,85 @@ box_summary %>%
 
 # Box Priorities
 
-```{r echo=F}
+## GIII
+```{r echo=F, message=F}
 partial_lines <-
   lines %>% 
-  group_by(aircraft,box) %>% 
+  group_by(aircraft,instrument,box) %>% 
   summarize(any=any(!is.na(status)),
             none=!any(!is.na(status))) %>% 
   st_set_geometry(NULL)         
 
-box_summary %>% 
-  select(box, aircraft, rank = priority_updated_rank, line_proportion) %>%
-#  left_join(partial_lines)
-  pivot_wider(id_cols=box,names_from = aircraft,values_from = rank) %>% 
-  arrange(G5) %>% 
-  kable()
+box_line_summary<-
+  line_summary %>%
+  pivot_wider(id_cols=c(box,target),names_from = instrument,
+              values_from = line_proportion,
+              names_prefix = "% ")
+
+
+box_summary %>%
+  filter(aircraft=="G3") %>% 
+  select(box, instrument, aircraft,
+         updated_rank = priority_updated_rank, original_rank=priority_original_rank, line_proportion) %>% 
+  pivot_wider(id_cols=c(box,aircraft),
+              names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
+  left_join(box_line_summary,by="box") %>%
+  arrange(updated_rank_avirisng) %>%
+  reactable(defaultPageSize=24,
+            columns = 
+              list(
+  "% avirisng" = colDef(format = colFormat(digits=0)),
+    "% prism" = colDef(format = colFormat(digits=0)),
+    "% hytes" = colDef(format = colFormat(digits=0)),
+    "% lvis" = colDef(format = colFormat(digits=0))))
+# 
+# 
+# line_summary %>% ungroup()%>%
+# #  mutate(summary=paste0(line_proportion,"% (",
+# #                        nlines_acquired,"/",
+# #                        nlines_total, ")")) %>% 
+#   pivot_wider(id_cols=c('box', 'target'),
+#               names_from = 'aircraft', values_from = c('line_proportion','nlines_total','nlines_acquired')) %>% 
+#   arrange(desc(line_proportion_G3),nlines_total_G3) %>% 
+#    reactable(defaultPageSize=25)
+# 
+
+
+
+```
+
+## GV
+```{r, echo=F}
+box_summary %>%
+  filter(aircraft=="G5") %>% 
+  select(box, instrument, aircraft,
+         updated_rank = priority_updated_rank, original_rank=priority_original_rank, line_proportion) %>% 
+  pivot_wider(id_cols=c(box,aircraft),
+              names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
+  left_join(box_line_summary,by="box") %>%
+  arrange(updated_rank_lvis) %>%
+  reactable(defaultPageSize=24,
+            columns = 
+              list(
+  "% avirisng" = colDef(format = colFormat(digits=0)),
+    "% prism" = colDef(format = colFormat(digits=0)),
+    "% hytes" = colDef(format = colFormat(digits=0)),
+    "% lvis" = colDef(format = colFormat(digits=0))))
 
 ```
 
 
-
-# Line completion summary
-
 ```{r line_summary, warning=F, echo=F}
 
-line_summary %>% ungroup()%>%
-  mutate(summary=paste0(nlines_acquired,"/",
-                        nlines_total, " (",line_proportion,"%)")) %>% 
-  pivot_wider(id_cols=c('box', 'target'),
-              names_from = 'aircraft', values_from = 'summary') %>% 
-  kable()
+# Line completion summary
+# line_summary %>% ungroup()%>%
+# #  mutate(summary=paste0(line_proportion,"% (",
+# #                        nlines_acquired,"/",
+# #                        nlines_total, ")")) %>% 
+#   pivot_wider(id_cols=c('box', 'target'),
+#               names_from = 'aircraft', values_from = c('line_proportion','nlines_total','nlines_acquired')) %>% 
+#   arrange(desc(line_proportion_G3),nlines_total_G3) %>% 
+#    reactable(defaultPageSize=25)
 
 
 # box_summary %>% 
@@ -119,10 +178,11 @@ swath_summary %>%
   ungroup() %>% 
   filter(aircraft=="G3") %>% 
   mutate(priority_rank=rank(desc(priority_updated))) %>% 
-  select(box, target, line, priority_rank) %>% 
-  arrange(priority_rank) %>% 
-  slice(1:20) %>% 
-  kable()
+  select(box, aircraft,target, instrument, line, priority_rank) %>% 
+  pivot_wider(id_cols=c(box,line,target),
+              names_from = instrument,values_from = c(priority_rank)) %>% 
+  arrange(avirisng) %>% 
+  reactable(defaultPageSize=10, filterable = TRUE)
 ```
 
 ## GV
@@ -134,11 +194,11 @@ swath_summary %>%
   ungroup() %>% 
   filter(aircraft=="G5") %>% 
   mutate(priority_rank=rank(desc(priority_updated))) %>% 
-  select(box, target, line, priority_rank) %>% 
-  arrange(priority_rank) %>% 
-  slice(1:20) %>% 
-  kable()
-
+  select(box, target, instrument, line, priority_rank) %>% 
+    pivot_wider(id_cols=c(box,line,target),
+              names_from = instrument,values_from = c(priority_rank)) %>% 
+  arrange(lvis) %>% 
+  reactable(defaultPageSize=10, filterable = TRUE)
 ```
 
 
