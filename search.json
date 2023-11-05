@@ -4,20 +4,20 @@
     "href": "index.html#schedule",
     "title": "BioSCape Project Overview",
     "section": "Schedule",
-    "text": "Schedule\n\n\n\n\n\n\n\n\n\n\naircraft\nG5\nG3\n\n\nstart_date\n2023-10-20\n2023-10-22\n\n\nstop_date\n2023-11-15\n2023-11-26\n\n\nflight_dates\nNov01, Oct20, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\nOct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\n\n\nflight_days\n9\n7\n\n\nscience_days_total\n26 days\n35 days\n\n\nscience_days_used\n17 days\n15 days\n\n\ntotal_days_remaining\n10 days\n21 days\n\n\napprox_science_days_remaining\n8 days\n18 days"
+    "text": "Schedule\n\n\n\n\n\n\n\n\n\n\naircraft\nG5\nG3\n\n\nstart_date\n2023-10-20\n2023-10-22\n\n\nstop_date\n2023-11-15\n2023-11-26\n\n\nflight_dates\nNov01, Oct20, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\nNov05, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\n\n\nflight_days\n9\n8\n\n\nscience_days_total\n26 days\n35 days\n\n\nscience_days_used\n17 days\n15 days\n\n\ntotal_days_remaining\n10 days\n21 days\n\n\napprox_science_days_remaining\n8 days\n18 days"
   },
   {
     "objectID": "index.html#giii",
     "href": "index.html#giii",
     "title": "BioSCape Project Overview",
     "section": "GIII",
-    "text": "GIII\n\n\n\n\n\nbox\ntarget\nline\npriority_rank\n\n\n\n\n18\nAquatic\nG3_18_AM_L01_FL185\n1\n\n\n18\nAquatic\nG3_18_AM_L02_FL185\n2\n\n\n18\nAquatic\nG3_18_AM_L03_FL185\n3\n\n\n18\nAquatic\nG3_18_AM_L04_FL185\n4\n\n\n10\nTerrestrial\nG3_10_L07_FL165\n5\n\n\n22\nAquatic\nG3_22_AM_L01_FL185\n6\n\n\n10\nTerrestrial\nG3_10_L09_FL165\n7\n\n\n13\nTerrestrial\nG3_13_L03_FL166\n8\n\n\n13\nTerrestrial\nG3_13_L04_FL166\n9\n\n\n10\nTerrestrial\nG3_10_L08_FL165\n10\n\n\n10\nTerrestrial\nG3_10_L06_FL165\n11\n\n\n13\nTerrestrial\nG3_13_L02_FL166\n12\n\n\n13\nTerrestrial\nG3_13_L05_FL166\n13\n\n\n1\nTerrestrial\nG3_1_L08_FL165\n14\n\n\n1\nTerrestrial\nG3_1_L09_FL165\n15\n\n\n13\nTerrestrial\nG3_13_L01_FL166\n16\n\n\n1\nTerrestrial\nG3_1_L07_FL165\n17\n\n\n13\nTerrestrial\nG3_13_L06_FL166\n18\n\n\n1\nTerrestrial\nG3_1_L05_FL165\n19\n\n\n7\nTerrestrial\nG3_7_L06_FL175\n20"
+    "text": "GIII\n\n\n\n\n\nbox\ntarget\nline\npriority_rank\n\n\n\n\n18\nAquatic\nG3_18_AM_L01_FL185\n1\n\n\n18\nAquatic\nG3_18_AM_L02_FL185\n2\n\n\n18\nAquatic\nG3_18_AM_L03_FL185\n3\n\n\n18\nAquatic\nG3_18_AM_L04_FL185\n4\n\n\n10\nTerrestrial\nG3_10_L07_FL165\n5\n\n\n22\nAquatic\nG3_22_AM_L01_FL185\n6\n\n\n10\nTerrestrial\nG3_10_L09_FL165\n7\n\n\n13\nTerrestrial\nG3_13_L03_FL166\n8\n\n\n13\nTerrestrial\nG3_13_L04_FL166\n9\n\n\n10\nTerrestrial\nG3_10_L08_FL165\n10\n\n\n10\nTerrestrial\nG3_10_L06_FL165\n11\n\n\n13\nTerrestrial\nG3_13_L02_FL166\n12\n\n\n13\nTerrestrial\nG3_13_L05_FL166\n13\n\n\n1\nTerrestrial\nG3_1_L08_FL165\n14\n\n\n1\nTerrestrial\nG3_1_L09_FL165\n15\n\n\n13\nTerrestrial\nG3_13_L01_FL166\n16\n\n\n1\nTerrestrial\nG3_1_L07_FL165\n17\n\n\n13\nTerrestrial\nG3_13_L06_FL166\n18\n\n\n1\nTerrestrial\nG3_1_L05_FL165\n19\n\n\n7\nTerrestrial\nG3_7_L05_FL175\n20"
   },
   {
     "objectID": "index.html#gv",
     "href": "index.html#gv",
     "title": "BioSCape Project Overview",
     "section": "GV",
-    "text": "GV\n\n\n\n\n\nbox\ntarget\nline\npriority_rank\n\n\n\n\nNA\nAquatic\nQ305M-Q305Z\n1.0\n\n\nNA\nAquatic\nQ303M-Q303Z\n2.0\n\n\nNA\nAquatic\nQ303A-Q303M\n3.0\n\n\nNA\nAquatic\nQ305A-Q305M\n4.0\n\n\nNA\nAquatic\nQ200M-Q200Z\n6.5\n\n\nNA\nAquatic\nQ201M-Q201Z\n6.5\n\n\nNA\nAquatic\nQ202M-Q202Z\n6.5\n\n\nNA\nAquatic\nQ203M-Q203Z\n6.5\n\n\nNA\nAquatic\nQ201A-Q201M\n9.0\n\n\nNA\nAquatic\nQ202A-Q202M\n10.0\n\n\nNA\nAquatic\nQ200A-Q200M\n11.0\n\n\nNA\nAquatic\nQ203A-Q203M\n12.0\n\n\n11\nTerrestrial\nC806A-C806Z\n13.0\n\n\n24\nAquatic\nQ000A-Q000M\n15.5\n\n\n24\nAquatic\nQ000M-Q000Z\n15.5\n\n\n24\nAquatic\nQ001A-Q001M\n15.5\n\n\nNA\nAquatic\nQ001M-Q001Z\n15.5\n\n\n11\nTerrestrial\nC802A-C802M\n18.0\n\n\n11\nTerrestrial\nC804M-C804Z\n19.0\n\n\n11\nTerrestrial\nC805M-C805Z\n20.0"
+    "text": "GV\n\n\n\n\n\nbox\ntarget\nline\npriority_rank\n\n\n\n\n23\nAquatic\nQ305M-Q305Z\n1.0\n\n\n23\nAquatic\nQ303M-Q303Z\n2.0\n\n\n23\nAquatic\nQ303A-Q303M\n3.0\n\n\n23\nAquatic\nQ305A-Q305M\n4.0\n\n\n22\nAquatic\nQ200M-Q200Z\n6.5\n\n\n22\nAquatic\nQ201M-Q201Z\n6.5\n\n\n22\nAquatic\nQ202M-Q202Z\n6.5\n\n\n22\nAquatic\nQ203M-Q203Z\n6.5\n\n\n22\nAquatic\nQ201A-Q201M\n9.0\n\n\n22\nAquatic\nQ202A-Q202M\n10.0\n\n\n22\nAquatic\nQ200A-Q200M\n11.0\n\n\n22\nAquatic\nQ203A-Q203M\n12.0\n\n\n18\nTerrestrial\nC806A-C806Z\n13.0\n\n\n20\nAquatic\nQ000A-Q000M\n15.5\n\n\n20\nAquatic\nQ000M-Q000Z\n15.5\n\n\n20\nAquatic\nQ001A-Q001M\n15.5\n\n\n20\nAquatic\nQ001M-Q001Z\n15.5\n\n\n18\nTerrestrial\nC802A-C802M\n18.0\n\n\n18\nTerrestrial\nC804M-C804Z\n19.0\n\n\n18\nTerrestrial\nC805M-C805Z\n20.0"
   }
 ]
