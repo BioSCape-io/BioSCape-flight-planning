@@ -4,7 +4,7 @@ format: html
 editor: source
 ---
 
-```{r setup, message=F, echo=F, warning=F, output=F,cache=F}
+```{r setup, message=F, echo=F, warning=F, output=F,cache=F, include=F}
 ## packages 
 library(quarto)
 library(knitr)
@@ -14,9 +14,10 @@ library(sf)
 library(reactable)
 
 
+
 # Run workflow
 if (Sys.getenv("USER") != "adamw") {
-  source("Update_Priorities.R")
+  source("Update_Priorities.R",local = knitr::knit_global())
   install.packages("knitr")
   }
 
