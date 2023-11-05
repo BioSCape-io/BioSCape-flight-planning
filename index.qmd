@@ -5,6 +5,8 @@ editor: source
 ---
 
 ```{r setup, message=F, echo=F, warning=F, output=F,cache=F, include=F}
+install.packages("quarto")
+
 ## packages 
 library(quarto)
 library(knitr)
@@ -12,7 +14,6 @@ library(tidyverse)
 library(lubridate)
 library(sf)
 library(reactable)
-
 
 
 # Run workflow
@@ -25,6 +26,7 @@ if (Sys.getenv("USER") != "adamw") {
 if (Sys.getenv("USER") == "adamw") {
   load("data/report_data.Rdata")
 }
+
 ```
 
 
