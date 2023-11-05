@@ -31,8 +31,8 @@ jobs:
       uses: quarto-dev/quarto-actions/publish@v2
       with:
         target: gh-pages
-        env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
 #    - uses: peaceiris/actions-gh-pages@v3
 #      if: github.ref == 'refs/heads/main'
 #      with:
