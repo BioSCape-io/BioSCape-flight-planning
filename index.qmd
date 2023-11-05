@@ -7,7 +7,6 @@ editor: source
 ```{r setup, message=F, echo=F, warning=F, output=F,cache=F}
 
 ## packages 
-library(quarto)
 library(knitr)
 library(tidyverse)
 library(lubridate)
