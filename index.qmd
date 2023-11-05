@@ -17,6 +17,7 @@ library(reactable)
 # Run workflow
 if (Sys.getenv("USER") != "adamw") {
   source("Update_Priorities.R")
+  install.packages("knitr")
   }
 
 if (Sys.getenv("USER") == "adamw") {
