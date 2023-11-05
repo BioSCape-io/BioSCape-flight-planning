@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BioSCape Project Overview",
+    "section": "",
+    "text": "aircraft\nG5\nG3\n\n\nstart_date\n2023-10-20\n2023-10-22\n\n\nstop_date\n2023-11-15\n2023-11-26\n\n\nflight_dates\nNov01, Oct20, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\nNov05, Oct22, Oct25, Oct26, Oct28, Oct29, Oct30, Oct31\n\n\nflight_days\n9\n8\n\n\nscience_days_total\n26 days\n35 days\n\n\nscience_days_used\n17 days\n15 days\n\n\ntotal_days_remaining\n10 days\n21 days\n\n\napprox_science_days_remaining\n8 days\n18 days"
+  },
+  {
+    "objectID": "index.html#giii",
+    "href": "index.html#giii",
+    "title": "BioSCape Project Overview",
+    "section": "GIII",
+    "text": "GIII\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nbox\naircraft\nupdated_rank_avirisng\nupdated_rank_prism\noriginal_rank_avirisng\noriginal_rank_prism\ntarget\n% avirisng\n% prism\n% hytes\n% lvis\n\n\n\n\n17\nG3\n1\n1\n3\n3\nAquatic\n60.00000\n60.00000\n100.00000\n100.000000\n\n\n5\nG3\n2\n2\n4\n4\nTerrestrial\n0.00000\n0.00000\n0.00000\n2.941177\n\n\n18\nG3\n3\n3\n5\n5\nAquatic\n0.00000\n0.00000\nNA\nNA\n\n\n18\nG3\n3\n3\n5\n5\nTerrestrial\nNA\nNA\n0.00000\n0.000000\n\n\n22\nG3\n4\n4\n7\n7\nAquatic\n0.00000\n0.00000\n0.00000\n0.000000\n\n\n10\nG3\n5\n5\n10\n10\nTerrestrial\n0.00000\n0.00000\n79.16667\n79.166667\n\n\n13\nG3\n6\n6\n11\n11\nTerrestrial\n0.00000\n0.00000\n100.00000\n96.296296\n\n\n1\nG3\n7\n7\n12\n12\nTerrestrial\n0.00000\n0.00000\n100.00000\n100.000000\n\n\n7\nG3\n8\n8\n13\n13\nTerrestrial\n66.66667\n66.66667\n0.00000\n0.000000\n\n\n11\nG3\n9\n9\n16\n16\nTerrestrial\n0.00000\n0.00000\n0.00000\n100.000000\n\n\n12\nG3\n10\n10\n19\n19\nTerrestrial\n0.00000\n0.00000\n25.00000\n50.000000\n\n\n2\nG3\n15\n15\n1\n1\nTerrestrial\n100.00000\n100.00000\n0.00000\n100.000000\n\n\n3\nG3\n15\n15\n8\n8\nTerrestrial\n100.00000\n100.00000\n62.06897\n100.000000\n\n\n4\nG3\n15\n15\n9\n9\nTerrestrial\n100.00000\n100.00000\nNA\nNA\n\n\n6\nG3\n15\n15\n14\n14\nTerrestrial\n100.00000\n100.00000\n100.00000\n100.000000\n\n\n8\nG3\n15\n15\n18\n18\nTerrestrial\n100.00000\n100.00000\n35.48387\n100.000000\n\n\n9\nG3\n15\n15\n6\n6\nTerrestrial\n100.00000\n100.00000\nNA\nNA\n\n\n14\nG3\n15\n15\n15\n15\nTerrestrial\n100.00000\n100.00000\n0.00000\n0.000000\n\n\n14\nG3\n15\n15\n15\n15\nAquatic\nNA\nNA\n0.00000\n0.000000\n\n\n24\nG3\n15\n15\n2\n2\nAquatic\n100.00000\n100.00000\n0.00000\n100.000000\n\n\n25\nG3\n15\n15\n17\n17\nTerrestrial\n100.00000\n100.00000\nNA\nNA\n\n\n25\nG3\n15\n15\n17\n17\nAquatic\nNA\nNA\n0.00000\n0.000000"
+  },
+  {
+    "objectID": "index.html#gv",
+    "href": "index.html#gv",
+    "title": "BioSCape Project Overview",
+    "section": "GV",
+    "text": "GV"
+  },
+  {
+    "objectID": "index.html#giii-1",
+    "href": "index.html#giii-1",
+    "title": "BioSCape Project Overview",
+    "section": "GIII",
+    "text": "GIII"
+  },
+  {
+    "objectID": "index.html#gv-1",
+    "href": "index.html#gv-1",
+    "title": "BioSCape Project Overview",
+    "section": "GV",
+    "text": "GV"
+  }
+]

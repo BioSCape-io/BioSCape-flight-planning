@@ -1,0 +1,291 @@
+---
+title: "BioSCape Project Overview"
+format: html
+editor: source
+---
+
+```{r setup, message=F, echo=F, warning=F, output=F,cache=F, include=F}
+
+## packages 
+library(quarto)
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(sf)
+library(reactable)
+
+
+# Run workflow
+if (Sys.getenv("USER") != "adamw") {
+  source("Update_Priorities.R",local = knitr::knit_global())
+  }
+
+if (Sys.getenv("USER") == "adamw") {
+  load("data/report_data.Rdata")
+}
+
+```
+
+
+## Schedule
+
+
+```{r linedates, echo=F}
+
+linedates <- lines %>% 
+  dplyr::filter(!is.na(date)) %>% 
+  group_by(aircraft) %>% 
+  st_set_geometry(NULL) %>% 
+  mutate(date=as_date(as.character(date),format="%Y%m%d")) %>% 
+  summarize(flight_dates=paste0(sort(unique(format(date,"%b%d"))),collapse=", "),
+              flight_days=sum(!is.na(unique(date))))
+
+dtime=data.frame(
+  aircraft=c("G5","G3"),
+  start_date=c(as_date(c("2023-10-20","2023-10-22"))),
+  stop_date=c(as_date(c("2023-11-15","2023-11-26")))) %>% 
+  left_join(linedates,by="aircraft") %>% 
+  mutate(science_days_total = stop_date - start_date ,
+           science_days_used=today()-start_date+1,
+         total_days_remaining=stop_date-today(),
+         approx_science_days_remaining=floor(total_days_remaining-(total_days_remaining/8)))
+
+dtime %>% t() %>% kable()
+
+```
+
+# Project Level Completion
+
+The following summaries have a few caveats:
+
+* Priorities constructed by intersecting _approximate_ swath widths with PI ROIs
+
+
+
+```{r box_summary, echo=F, warning=F, message=F}
+box_summary %>% 
+  # st_set_geometry(NULL) %>% 
+   group_by(instrument) %>% 
+   summarize(proportion=mean(line_proportion,na.rm=T)) %>% 
+    mutate(proportion=round(proportion,1)) %>% 
+    spread(instrument,proportion) %>% 
+    kable()
+```
+
+# Box Priorities
+
+## GIII
+```{r echo=F, message=F}
+partial_lines <-
+  lines %>% 
+  group_by(aircraft,instrument,box) %>% 
+  summarize(any=any(!is.na(status)),
+            none=!any(!is.na(status))) %>% 
+  st_set_geometry(NULL)         
+
+box_line_summary<-
+  line_summary %>%
+  pivot_wider(id_cols=c("box","target"),names_from = "instrument",
+              values_from = "line_proportion",
+              names_prefix = "% ")
+
+
+box_summary %>%
+  filter(aircraft=="G3") %>% 
+  select(box, instrument, aircraft,
+         updated_rank = priority_updated_rank, original_rank=priority_original_rank, line_proportion) %>% 
+  pivot_wider(id_cols=c(box,aircraft),
+              names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
+  left_join(box_line_summary,by="box") %>%
+  arrange(updated_rank_avirisng) %>%
+  kable()
+
+  # reactable(defaultPageSize=24,
+  #           columns = 
+  #             list(
+  # "% avirisng" = colDef(format = colFormat(digits=0)),
+  #   "% prism" = colDef(format = colFormat(digits=0)),
+  #   "% hytes" = colDef(format = colFormat(digits=0)),
+  #   "% lvis" = colDef(format = colFormat(digits=0))))
+# 
+# 
+# line_summary %>% ungroup()%>%
+# #  mutate(summary=paste0(line_proportion,"% (",
+# #                        nlines_acquired,"/",
+# #                        nlines_total, ")")) %>% 
+#   pivot_wider(id_cols=c('box', 'target'),
+#               names_from = 'aircraft', values_from = c('line_proportion','nlines_total','nlines_acquired')) %>% 
+#   arrange(desc(line_proportion_G3),nlines_total_G3) %>% 
+#    reactable(defaultPageSize=25)
+# 
+
+
+
+```
+
+## GV
+```{r, echo=F}
+box_summary %>%
+  filter(aircraft=="G5") %>% 
+  select(box, instrument, aircraft,
+         updated_rank = priority_updated_rank, original_rank=priority_original_rank, line_proportion) %>% 
+  pivot_wider(id_cols=c(box,aircraft),
+              names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
+  left_join(box_line_summary,by="box") %>%
+  arrange(updated_rank_lvis) %>%
+  reactable(defaultPageSize=24,
+            columns = 
+              list(
+  "% avirisng" = colDef(format = colFormat(digits=0)),
+    "% prism" = colDef(format = colFormat(digits=0)),
+    "% hytes" = colDef(format = colFormat(digits=0)),
+    "% lvis" = colDef(format = colFormat(digits=0))))
+
+```
+
+
+```{r line_summary, warning=F, echo=F}
+
+# Line completion summary
+# line_summary %>% ungroup()%>%
+# #  mutate(summary=paste0(line_proportion,"% (",
+# #                        nlines_acquired,"/",
+# #                        nlines_total, ")")) %>% 
+#   pivot_wider(id_cols=c('box', 'target'),
+#               names_from = 'aircraft', values_from = c('line_proportion','nlines_total','nlines_acquired')) %>% 
+#   arrange(desc(line_proportion_G3),nlines_total_G3) %>% 
+#    reactable(defaultPageSize=25)
+
+
+# box_summary %>% 
+#   ggplot(aes(x=box))+
+#   geom_bar(aes(y=nlines_total),stat="identity",col=grey(0.9))+
+#   geom_bar(aes(y=nlines_flown),stat="identity",fill="yellow")+
+#   geom_bar(aes(y=nlines_acquired),stat="identity",fill="darkgreen")+
+#   facet_wrap(~instrument,drop = T,nrow=1)+
+#   coord_flip()+
+#   xlab("Flight Box")+
+#   ylab("Flight Lines Completed")
+#   
+
+```
+
+
+# Line Priorities
+
+## GIII
+
+```{r, warning=F, echo=F}
+
+swath_summary %>% 
+  distinct() %>% 
+  ungroup() %>% 
+  filter(aircraft=="G3") %>% 
+  mutate(priority_rank=rank(desc(priority_updated))) %>% 
+  select(box, aircraft,target, instrument, line, priority_rank) %>% 
+  pivot_wider(id_cols=c(box,line,target),
+              names_from = instrument,values_from = c(priority_rank)) %>% 
+  arrange(avirisng) %>% 
+  reactable(defaultPageSize=10, filterable = TRUE)
+```
+
+## GV
+
+```{r, warning=F, echo=F}
+
+swath_summary %>% 
+  distinct() %>% 
+  ungroup() %>% 
+  filter(aircraft=="G5") %>% 
+  mutate(priority_rank=rank(desc(priority_updated))) %>% 
+  select(box, target, instrument, line, priority_rank) %>% 
+    pivot_wider(id_cols=c(box,line,target),
+              names_from = "instrument",values_from = c(priority_rank)) %>% 
+  arrange(lvis) %>% 
+  reactable(defaultPageSize=10, filterable = TRUE)
+```
+
+
+## 
+
+```{r, eval=F, echo=F, fig.height=3}
+#Lines flown per day
+lines %>% 
+  filter(!is.na(date),!is.na(status)) %>%
+#  st_set_geometry(NULL) %>% 
+  group_by(date,instrument) %>% 
+  summarize(nlines=n()) %>% 
+  mutate(date=as_date(as.character(date),format="%Y%m%d")) %>%
+  ggplot(aes(x=date,y=nlines,col=instrument,group=instrument))+
+  geom_line()+
+  ylab("Lines Flown")+
+  xlab("Date")
+
+```
+
+
+
+
+```{r, eval=F, echo=F}
+
+ggplot(bioscape_summary,aes(x=instrument))+
+   geom_bar(aes(y=proportion),stat="identity")+
+   coord_flip()
+
+```
+
+```{r, eval=F, echo=F, message=F}
+
+
+## calculate area-based priority index by box ### ADD PRIORITY HERE?
+box_priority_area <- areas_pi_flightbox %>% 
+  mutate(pi_area_in_box = polygon_area/pi_total_area) %>% 
+  mutate(pi_area_priority = pi_area_in_box * area_remaining)  %>% #View() #you are penalised if you already have an acquisition
+  group_by(box_nr) %>% 
+  summarize(area_based_box_priority = sum(pi_area_priority)) 
+  
+## pull in a cloud risk value for each box 
+box_priority_cloud <- st_set_geometry(boxes,NULL) #remove geometry from boxes, coerce to dataframe
+box_priority_cloud <- box_priority_cloud [, c("box_nr", "cloudmean")] # pull out box_nr and cloud mean
+
+## add in cloud values and calculate new combined priority metric
+box_priority_area_cloud <- box_priority_area %>% 
+  left_join(box_priority_cloud, by="box_nr") %>%
+  mutate(cloudscale=cloudmean) %>% 
+  mutate(across(cloudscale, function(x){scales::rescale(cloudmean,c(20,100))})) %>% #change to adjust strength of cloud
+  mutate (priority_area_cloud = (cloudscale) * area_based_box_priority) # make cloud percentage into a proportion, then multiply by area based priority score 
+
+#print(box_priority_area_cloud, n=100) 
+
+## Sort and export
+psheet="https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHVOu9U8ajDIY8/edit#gid=0" #separate sheet
+#psheet="https://docs.google.com/spreadsheets/d/1x_mmDL6JhNivV-Mk5HOFGxodkphaYjVicXkB4k8j9tE" #combined data sheet
+
+
+today=lubridate::today() #set sheet name
+
+box_priority_area_cloud %>% 
+  arrange(desc(area_based_box_priority)) %>%
+  st_set_geometry(NULL) %>%
+  select(-cloudscale) %>% 
+  mutate(across(area_based_box_priority, function(x){round(as.numeric(x/sum(area_based_box_priority)*100))})) %>%
+  mutate(across(cloudmean, round)) %>%
+  mutate(across(priority_area_cloud, function(x){round(as.numeric(x/max(priority_area_cloud)*100))})) %>%
+  arrange(desc(priority_area_cloud))%>%
+  left_join(st_set_geometry(boxes,NULL),c("box_nr")) %>% 
+  mutate(
+    # !!paste0(format(lubridate::ymd(today+1), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+1), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+2), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+2), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+3), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+3), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+4), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+4), "%b%d"),"_G5"):="",
+  ) %>% 
+  select(starts_with("Oct"),starts_with("Nov"),box_nr,target,
+         priority=priority_area_cloud,priority_cloud=cloudmean.x,priority_team=area_based_box_priority,Sync,
+         AVIRIS,PRISM,HyTES,LVIS,PIs) %>% 
+  write_sheet(ss = psheet,
+              sheet = as.character(today))
+```

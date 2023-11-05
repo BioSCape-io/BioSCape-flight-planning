@@ -1,0 +1,37 @@
+# https://github.com/pommevilla/friendly-dollop/blob/master/.github/workflows/quarto-render.yml
+name: Render and deploy Quarto files
+on: 
+  push:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  schedule:
+  #  - cron:  '1 0 * * 0' # runs every Sunday at 00:01
+    - cron:  '0 */6 * * *' # run every 6th hour
+
+
+jobs:
+  quarto-render-and-deploy:
+    runs-on: ubuntu-latest
+    container: adamwilsonlab/emma:latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      RENV_PATHS_ROOT: ~/.local/share/renv
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Install Quarto and render"
+      uses: pommevilla/quarto-render@main
+    - name: Install R Package Dependencies
+      run: |-
+        Rscript -e "install.packages('questionr')"
+        Rscript -e "questionr::qscan(list.files(pattern='*.R',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
+        Rscript -e "questionr::qscan(list.files(pattern='*.qmd',recursive=T), load = TRUE, detail = FALSE)" # this scans all scripts and installs any needed packages
+        Rscript -e "install.packages('reactable')"
+
+    - name: "Deploy to gh-pages"
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
