@@ -98,13 +98,15 @@ box_summary %>%
               names_from = instrument,values_from = c(updated_rank,original_rank)) %>% 
   left_join(box_line_summary,by="box") %>%
   arrange(updated_rank_avirisng) %>%
-  reactable(defaultPageSize=24,
-            columns = 
-              list(
-  "% avirisng" = colDef(format = colFormat(digits=0)),
-    "% prism" = colDef(format = colFormat(digits=0)),
-    "% hytes" = colDef(format = colFormat(digits=0)),
-    "% lvis" = colDef(format = colFormat(digits=0))))
+  kable()
+
+  # reactable(defaultPageSize=24,
+  #           columns = 
+  #             list(
+  # "% avirisng" = colDef(format = colFormat(digits=0)),
+  #   "% prism" = colDef(format = colFormat(digits=0)),
+  #   "% hytes" = colDef(format = colFormat(digits=0)),
+  #   "% lvis" = colDef(format = colFormat(digits=0))))
 # 
 # 
 # line_summary %>% ungroup()%>%
