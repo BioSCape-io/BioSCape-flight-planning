@@ -19,7 +19,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RENV_PATHS_ROOT: ~/.local/share/renv
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: "Install Quarto and render"
       uses: pommevilla/quarto-render@main
     - name: Install R Package Dependencies
