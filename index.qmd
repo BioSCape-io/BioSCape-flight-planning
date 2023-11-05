@@ -18,10 +18,7 @@ library(reactable)
 # Run workflow
 if (Sys.getenv("USER") != "adamw") {
   source("Update_Priorities.R",local = knitr::knit_global())
-  install.packages("knitr")
-  library(sparkline)
-  library(htmlwidgets)
-  sparkline::sparkline(0)
+  install.packages("quarto")
   install.packages("reactable")
   }
 
