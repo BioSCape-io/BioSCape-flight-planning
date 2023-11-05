@@ -83,7 +83,7 @@ partial_lines <-
 
 box_line_summary<-
   line_summary %>%
-  pivot_wider(id_cols=c(box,target),names_from = "instrument",
+  pivot_wider(id_cols=c("box","target"),names_from = "instrument",
               values_from = "line_proportion",
               names_prefix = "% ")
 
