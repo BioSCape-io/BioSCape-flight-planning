@@ -22,7 +22,9 @@ folks$Lat <- as.numeric(str_split_i(folks$LatLong, ", ", i = 1))
 folks$Lon <- as.numeric(str_split_i(folks$LatLong, ", ", i = 2))
 
 # Make sf object
-folks <- st_as_sf(folks, coords = c("Lon", "Lat"), crs = 4326)
+folks <- folks %>% filter(!is.na(Lat)) %>% 
+  st_as_sf(coords = c("Lon", "Lat"), crs = 4326)
+
 boxes <- boxes %>% st_transform(st_crs(folks))
 
 # Map
