@@ -16,14 +16,22 @@ if (Sys.getenv("USER") == "adamw") {gmail = "adamw@buffalo.edu"}
 drive_auth(email = gmail)
 gs4_auth(token = drive_token())
 
+
 #### PART 2: Box Prioritization ####
 
 ## read in flight boxes and team region of interest (ROI) polygons 
 #boxes_dir= "data/20230919_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE ROIS
 #rois_dir="data/20230907_Team ROIs.gpkg" # UPDATE THIS FILENAME AS YOU UPDATE ROIS
 
-boxes <- st_read("data/20231018_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg") %>%  st_make_valid()
-rois <- st_read("data/20230907_Team_ROIs_addedPIs.gpkg")
+boxes <- st_read("data/20231021_G3_AVIRIS_PRISM_boxes_CLOUD_ELEV.gpkg") %>%  st_make_valid()
+rois <- st_read("data/20231019_Team_ROIs_addedPIs.gpkg")
+
+
+
+#GVlines<-st_read("https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/flightplans/Bioscape_101023_GV_lines.json")
+#GIIIlines<-st_read("https://popo.jpl.nasa.gov/mmgis-aviris/Missions/BIOSCAPE/Layers/flightplans/G3_lines_20231021d.json")
+#plot(GIIIlines)
+
 
 ## sum up area each PI requested (total)
 roi_areas <- rois %>% 
@@ -36,6 +44,7 @@ roi_areas <- rois %>%
 
 # ## update area acquired 
 pi_area_acquired <- c("0", #Adler   
+                      "0", #CalVal
                       "0", #Cawse-Nicholson
                       "0", #Cho
                       "0", #Clark
@@ -93,22 +102,27 @@ psheet="https://docs.google.com/spreadsheets/d/1D4Xba_yucp1o9eHkRmvrHdxQgRG4HbHV
 #psheet="https://docs.google.com/spreadsheets/d/1x_mmDL6JhNivV-Mk5HOFGxodkphaYjVicXkB4k8j9tE" #combined data sheet
 
 
-today=1+lubridate::today() #set sheet name
+today=lubridate::today() #set sheet name
 
-box_priority_area_cloud %>% arrange(desc(area_based_box_priority)) %>%
+box_priority_area_cloud %>% 
+  arrange(desc(area_based_box_priority)) %>%
   st_set_geometry(NULL) %>%
   select(-cloudscale) %>% 
-  mutate(across(area_based_box_priority, function(x){round(as.numeric(x/max(area_based_box_priority)*100))})) %>%
+  mutate(across(area_based_box_priority, function(x){round(as.numeric(x/sum(area_based_box_priority)*100))})) %>%
   mutate(across(cloudmean, round)) %>%
   mutate(across(priority_area_cloud, function(x){round(as.numeric(x/max(priority_area_cloud)*100))})) %>%
   arrange(desc(priority_area_cloud))%>%
   left_join(st_set_geometry(boxes,NULL),c("box_nr")) %>% 
-  mutate(
-    !!format(lubridate::ymd(today), "%b%d"):="",
-    !!format(lubridate::ymd(today+1), "%b%d"):="",
-    !!format(lubridate::ymd(today+2), "%b%d"):="",
-    !!format(lubridate::ymd(today+3), "%b%d"):="",
-    ) %>% 
+  # mutate(
+    # !!paste0(format(lubridate::ymd(today+1), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+1), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+2), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+2), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+3), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+3), "%b%d"),"_G5"):="",
+    # !!paste0(format(lubridate::ymd(today+4), "%b%d"),"_G3"):="",
+    # !!paste0(format(lubridate::ymd(today+4), "%b%d"),"_G5"):="",
+  # ) %>% 
   select(starts_with("Oct"),starts_with("Nov"),box_nr,target,
          priority=priority_area_cloud,priority_cloud=cloudmean.x,priority_team=area_based_box_priority,Sync,
          AVIRIS,PRISM,HyTES,LVIS,PIs) %>% 
